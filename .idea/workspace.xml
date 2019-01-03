@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59401b99-0d72-4f6d-88ff-fe75fb22ba7b" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/tamplate/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/tamplate/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/tamplate/login.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,9 +16,7 @@
       <file leaf-file-name="login.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/tamplate/login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-            </state>
+            <state relative-caret-position="-277" />
           </provider>
         </entry>
       </file>
@@ -53,7 +51,7 @@
     <option name="jreName" value="1.8" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="113" />
+    <option name="x" value="227" />
     <option name="y" value="23" />
     <option name="width" value="1167" />
     <option name="height" value="735" />
@@ -229,7 +227,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="113" y="23" width="1167" height="735" extended-state="0" />
+    <frame x="227" y="23" width="1167" height="735" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" />
@@ -283,9 +281,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/tamplate/login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-        </state>
+        <state relative-caret-position="-277" />
       </provider>
     </entry>
   </component>
