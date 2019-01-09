@@ -32,7 +32,7 @@ public class UserManagerServiceTest {
     @Test
     @Transactional
     public void test2() {
-        assertEquals("汤大业", service.validateUser("MF1832144@smail.nju.edu.cn", "123456").getUsername());
+        assertEquals("你好", service.validateUser("MF1832144@smail.nju.edu.cn", "123456").getUsername());
     }
 
     @Test
