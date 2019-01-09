@@ -109,7 +109,6 @@ public class User {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", passwd='" + passwd + '\'' +
                 ", createAt=" + createAt +
                 ", lastLogin=" + lastLogin +
                 ", verificationCode='" + verificationCode + '\'' +
