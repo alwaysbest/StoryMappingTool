@@ -1,13 +1,16 @@
 package nju.software.repo;
 
 import nju.software.App;
+import nju.software.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
+import static org.junit.Assert.*;
 
 /**
  * Time       : 2019/1/8 8:12 PM
@@ -16,13 +19,31 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
-@TestPropertySource(locations = "classpath:application.properties")
+//@TestPropertySource(locations = "classpath:application.properties")
 public class UserRepoTest {
     @Resource
-    UserRepo userRepo;
+    UserRepo repo;
 
     @Test
-    public void testFindByEmail(){
-        System.out.println(userRepo.findUserByEmail("MF1832144@smail.nju.edu.cn"));
+    @Transactional
+    public void test1() {
+        assertNotNull(repo.findUserByEmail("MF1832144@smail.nju.edu.cn"));
+    }
+
+    @Test
+    @Transactional
+    public void test2() {
+        assertEquals("你好", repo.findUserByEmailAndPasswd("MF1832144@smail.nju.edu.cn",
+                "a448410bdcbb4d7cfb32830909f6aa08").getUsername());
+    }
+
+    @Test
+    @Transactional
+    public void test3() {
+        User userDto = repo.findUserByEmail("MF1832144@smail.nju.edu.cn");
+        assertNotNull(userDto);
+        userDto.setUsername("世界");
+        User user = repo.saveAndFlush(userDto);
+        assertEquals("世界", user.getUsername());
     }
 }

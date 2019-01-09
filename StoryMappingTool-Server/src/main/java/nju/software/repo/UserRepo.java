@@ -19,4 +19,6 @@ public interface UserRepo extends JpaRepository<User, Integer> {
         Output:      如果存在，返回用户，否则返回Null
     */
     User findUserByEmail(String email);
+
+    User findUserByEmailAndPasswd(String email, String passwd);
 }

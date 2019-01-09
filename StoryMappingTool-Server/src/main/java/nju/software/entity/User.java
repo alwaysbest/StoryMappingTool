@@ -18,6 +18,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "passwd")
     private String passwd;
 
@@ -35,8 +38,9 @@ public class User {
     public User() {
     }
 
-    public User(String email, String passwd, Date createAt, Date lastLogin, String verificationCode) {
+    public User(String email, String username, String passwd, Date createAt, Date lastLogin, String verificationCode) {
         this.email = email;
+        this.username = username;
         this.passwd = passwd;
         this.createAt = createAt;
         this.lastLogin = lastLogin;
@@ -91,11 +95,20 @@ public class User {
         this.verificationCode = verificationCode;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
                 ", passwd='" + passwd + '\'' +
                 ", createAt=" + createAt +
                 ", lastLogin=" + lastLogin +
