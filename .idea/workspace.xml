@@ -2,7 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71d393f7-b27d-47f8-876f-250d347d4874" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/request/GenerateEmailCodeRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/request/LoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/request/RegisterRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/response/GenerateEmailCodeResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/response/LoginResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/response/RegisterResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/service/UserManagerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/service/impl/UserManagerServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/util/EmailUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/util/StringUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/test/java/nju/software/service/UserManagerServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/test/java/nju/software/util/StringUtilTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/StoryMappingTool.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/controller/UpdateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/repo/StoryRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/repo/StoryRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/repo/UserRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/java/nju/software/repo/UserRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/test/java/nju/software/repo/StoryRepoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/test/java/nju/software/repo/StoryRepoTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StoryMappingTool-Server/src/test/java/nju/software/repo/UserRepoTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/StoryMappingTool-Server/src/test/java/nju/software/repo/UserRepoTest.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,17 +37,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/StoryMappingTool-Webapp/login.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="6" lean-forward="true" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -52,72 +68,26 @@
     <option name="jreName" value="1.8" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="158" />
+    <option name="x" value="85" />
     <option name="y" value="23" />
     <option name="width" value="1167" />
     <option name="height" value="735" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <autoscrollFromSource ProjectPane="true" />
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-              <item name="StoryMappingTool-Server" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-              <item name="StoryMappingTool-Server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-              <item name="StoryMappingTool-Server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-              <item name="StoryMappingTool-Server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-              <item name="StoryMappingTool-Webapp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StoryMappingTool" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StoryMappingTool" type="462c0819:PsiDirectoryNode" />
-              <item name="StoryMappingTool-Webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="ProjectPane" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1547106014075" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1547203120158" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
   </component>
@@ -181,7 +151,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="158" y="23" width="1167" height="735" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25866666" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -210,6 +179,34 @@
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Maven Projects" order="7" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25866666" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="right" id="Maven" order="0" />
+      <window_info anchor="right" id="Commander" order="1" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Theme Preview" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Maven Projects" order="8" />
+    </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/StoryMappingTool-Server/src/main/resources/application.properties">
@@ -218,9 +215,12 @@
     <entry file="file://$PROJECT_DIR$/StoryMappingTool-Webapp/login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="17" column="6" lean-forward="true" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">

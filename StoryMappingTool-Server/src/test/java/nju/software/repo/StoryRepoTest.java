@@ -4,10 +4,12 @@ import nju.software.App;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
+import static org.junit.Assert.*;
 
 /**
  * Time       : 2019/1/9 12:40 AM
@@ -16,13 +18,13 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
-@TestPropertySource(locations = "classpath:application.properties")
 public class StoryRepoTest {
     @Resource
     StoryRepo storyRepo;
 
     @Test
+    @Transactional
     public void testFindStoryById() {
-        System.out.println(storyRepo.findStoryById(1));
+        assertNotNull(storyRepo.findStoryById(1));
     }
 }
