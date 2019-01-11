@@ -5,3 +5,5 @@
 */pid
 *.log
 .idea/
+
+.idea/workspace.xml
