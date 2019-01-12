@@ -7,21 +7,25 @@ import nju.software.controller.response.GenerateEmailCodeResponse;
 import nju.software.controller.response.LoginResponse;
 import nju.software.controller.response.RegisterResponse;
 import nju.software.entity.User;
-import nju.software.service.UserManagerService;
+import nju.software.service.UserManageService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+
+/**
+ * Time       : 2019/1/10 11:14 PM
+ * Author     : tangdaye
+ * Description: 用户相关请求
+ */
+@CrossOrigin
 @Controller
 @ResponseBody
 @RequestMapping(value = "/ui")
 public class UserController {
     @Resource
-    private UserManagerService service;
+    private UserManageService service;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public LoginResponse login(LoginRequest request) {
@@ -29,15 +33,15 @@ public class UserController {
         String email = request.getEmail();
         String password = request.getPassword();
         if (!service.existUser(email)) {
-            response.setStatus("USER_NOT_EXIST");
+            response.setStatus("USER_NOT_EXIST_TEST");
         } else {
             User user = service.validateUser(email, password);
             if (user == null) {
-                response.setStatus("WRONG_PASSWORD");
+                response.setStatus("WRONG_PASSWORD_TEST");
             } else {
                 response.setId(user.getId());
                 response.setUsername(user.getUsername());
-                response.setStatus("SUCCESS");
+                response.setStatus("SUCCESS_TEST");
             }
         }
         return response;

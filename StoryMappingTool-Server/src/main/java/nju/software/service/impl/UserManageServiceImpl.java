@@ -2,7 +2,7 @@ package nju.software.service.impl;
 
 import nju.software.entity.User;
 import nju.software.repo.UserRepo;
-import nju.software.service.UserManagerService;
+import nju.software.service.UserManageService;
 import nju.software.util.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Date;
  * Description: 用户管理服务实现
  */
 @Service
-public class UserManagerServiceImpl implements UserManagerService {
+public class UserManageServiceImpl implements UserManageService {
     @Resource
     private UserRepo repo;
 

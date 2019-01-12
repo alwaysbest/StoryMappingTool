@@ -18,9 +18,9 @@ import javax.annotation.Resource;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
-public class UserManagerServiceTest {
+public class UserManageServiceTest {
     @Resource
-    UserManagerService service;
+    UserManageService service;
 
     @Test
     @Transactional
