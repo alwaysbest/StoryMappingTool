@@ -14,6 +14,9 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "creator_id")
+    private String createId;
+
     @Column(name = "title")
     private String title;
 
@@ -23,7 +26,8 @@ public class Project {
     public Project() {
     }
 
-    public Project(String title, String description) {
+    public Project(String createId, String title, String description) {
+        this.createId = createId;
         this.title = title;
         this.description = description;
     }
@@ -34,6 +38,14 @@ public class Project {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(String createId) {
+        this.createId = createId;
     }
 
     public String getTitle() {
@@ -50,14 +62,5 @@ public class Project {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
     }
 }

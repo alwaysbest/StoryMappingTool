@@ -4,6 +4,7 @@ import nju.software.entity.Story;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+
 /**
  * Time       : 2019/1/9 12:38 AM
  * Author     : tangdaye
@@ -11,5 +12,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface StoryRepo extends JpaRepository<Story, Integer> {
-    Story findStoryById(int id);
+    Story findStoryById(int storyId);
 }
