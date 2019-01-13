@@ -1,0 +1,681 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>storyboard</title>
+    <meta name="description" content="这是一个 storyboard 页面">
+    <meta name="keywords" content="storyboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+  
+    
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    
+    <link rel="stylesheet" href="../static/css/amazeui.min.css" />
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <link rel="stylesheet" href="../static/css/app.css">
+    <link rel="stylesheet" href="../static/css/storyboard.css">
+    
+    <script src="../static/js/vue.js"></script>
+</head>
+
+<body>
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <div class="am-topbar-brand">
+            <a href="javascript:;" class="tpl-logo">
+                <img src="../static/img/logo.png" alt="">
+            </a>
+        </div>
+
+        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+              
+                <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
+                            class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="tpl-header-list-user-nick">阿令</span><span class="tpl-header-list-user-ico"> <img
+                                src="../static/img/user.png"></span>
+                    </a>
+                    <ul class="am-dropdown-content">
+                        <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
+                        <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
+                        <li><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                    </ul>
+                </li>
+                <li><a href="###" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="app" class="tpl-page-container tpl-page-header-fixed">
+        <!--上面的周期-->
+        <!-- v-for="backbone in backboneList" -->
+        <ul class="activity-ul" >
+            <li class="backbone-li" v-for="backbone in backboneList">
+                <back-bone-component @doubleclick='updatebackbone' :backbone_card.sync="backbone"></back-bone-component>
+                <div class="activity-li" >
+                    <activity-component v-for="activity in backbone.activityList" @doubleclick='updateactivity'></activity-component>  
+                
+                    <!-- <div class="activity-li">
+                            <span class="am-icon-plus activity-extend-span"  @click="showActivityModal = 1"></span>
+                            <activity-modal v-if="showActivityModal" @close="showActivityModal = 0">
+                                    <span slot="header" v-if="showActivityModal == 2">编辑活动</span>
+                            </activity-modal>
+                    </div> -->
+                </div>
+             
+            </li>
+            <li class="backbone-extend">
+                <span class="am-icon-plus backbone-extend-span"  @click="showBackBoneModal = 1"></span>
+                   <!-- use the modal component, pass in the prop -->
+                   <backbone-modal v-if="showBackBoneModal" @close="showBackBoneModal = 0" :backbone_data_in_modal.sync="backboneObject">
+                    
+                        <span slot="header" v-if="showBackBoneModal == 2">编辑骨干故事</span>
+                </backbone-modal>
+
+            </li>
+        </ul>
+        <!--上面的周期结束-->
+
+        <!--  开发周期开始  -->
+
+
+        <div class="tpl-block">
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-2">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <span class="am-icon-plus"></span>
+                            MVP迭代一
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-2" @click="showDevelopModal = 2">
+                    <span class="am-icon-calendar">&nbsp;开始</span> 2019-01-16
+
+                </div>
+                <div class="am-u-sm-12 am-u-md-2" @click="showDevelopModal = 2">
+                        <span class="am-icon-calendar">&nbsp;结束</span> 2019-01-16
+    
+                    </div>
+                <div class="am-u-sm-12 am-u-md-4" @click="showDevelopModal = 2">
+                    13 cards of 24 hours
+                </div>
+                <div class="am-u-sm-12 am-u-md-2" style="color: #F44336;" @click="showDevelopModal = 1">
+                        <span class="am-icon-bullhorn">&nbsp;添加新迭代</span> 
+                       
+                </div>
+                <develop-modal v-if="showDevelopModal" @close="showDevelopModal = 0">
+                        <span slot="header" v-if="showDevelopModal == 2">编辑发行周期</span>
+                </develop-modal>
+
+            </div>
+        </div>
+        <!--开发周期结束 -->
+
+
+        <!-- 开发周期内容开始-->
+        <ul class="activity-ul">
+            
+            <li class="task-backbone-li" v-for="backbone in backboneList">
+                <div class="task-li" v-for="activity in backbone.activityList">
+                    <task-component @doubleclick='updatetask' v-if="activity.taskList.length==0">
+                            <div slot="task_component_content" style="width: 200px;height:200px; margin-right:5px">
+                                    
+                            </div>
+                    </task-component>
+                   
+                    <task-component @doubleclick='updatetask' v-for="task in activity.taskList" >
+
+                    </task-component>
+                   
+                    <!-- <div class="backbone-extend">
+                        <span class="am-icon-plus backbone-extend-span"  @click="showTaskModal = true"></span>
+                      
+                        <task-modal v-if="showTaskModal" @close="showTaskModal = false">
+                            
+                        </task-modal>
+                    </div> -->
+
+                </div>
+                <!-- <div class="activity-li">
+                        <span class="am-icon-plus activity-extend-span"  @click="showActivityModal = 1"></span>
+                        <activity-modal v-if="showActivityModal" @close="showActivityModal = 0">
+                                <span slot="header" v-if="showActivityModal == 2">编辑活动</span>
+                        </activity-modal>
+                </div> -->
+           
+            </li>
+           
+        </ul>
+        <!-- 开发周期内容结束-->
+    </div>
+</body>
+
+
+</html>
+
+<script type="text/x-template" id="back_bone_component">
+        <div style="width: 200px">
+                    <div class="dashboard-stat blue" @dblclick='doubleclick'>
+                        <!-- <div class="visual">
+                             <i class="am-icon-comments-o"></i> 
+                        </div> -->
+                        <div class="details">
+                            <div class="number">{{backbone_card.name}}</div>
+                            <div class="desc">{{backbone_card.description}}</div>
+                        </div>
+                        <a class="more" href="#"> 查看更多
+                            <i class="m-icon-swapright">3</i>
+                        </a>
+                    </div>
+                </div> 
+</script>
+
+
+<script type="text/x-template" id="activity_component">
+         <div style="width: 200px; margin-right:5px">
+                    <div class="dashboard-stat purple" @dblclick='doubleclick'>
+                        <!-- <div class="visual">
+                            <i class="am-icon-bar-chart-o"></i>
+                        </div> -->
+                        <div class="details">
+                            <div class="number"> 测试活动1 </div>
+                            <div class="desc"> 这是一个详细描述 </div>
+                        </div>
+                        <a class="more" href="#"> 1
+                    <i class="m-icon-swapright">+</i>
+                </a>
+                    </div>
+                </div>
+</script>
+<script type="text/x-template" id="task_component">
+         <div  style="width: 200px; margin-right:5px">
+            <slot name="task_component_content">
+                    <div class="dashboard-stat green" @dblclick='doubleclick'>
+                        <!-- <div class="visual">
+                            <i class="am-icon-apple"></i>
+                        </div> -->
+                        <div class="details">
+                            <div class="number"> 测试任务1 </div>
+                            <div class="desc"> 这是描述噢噢噢噢 </div>
+                        </div>
+                        <a class="more" href="#"> 向下拓展
+                    <i class="m-icon-swapright ">2</i>
+                        </a>
+                    </div>
+                </slot>
+                </div>
+</script>
+
+
+<!-- template for the modal component -->
+<script type="text/x-template" id="modal-backbone-template">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+  
+            <div class="modal-header">
+              <slot name="header">
+                添加骨干故事
+              </slot>
+              <i class="modal-default-close am-icon-remove" @click="$emit('close')"></i>
+            </div>
+  
+            <div class="modal-body">
+              <slot name="body">
+                <div class="tpl-form-body tpl-form-line">
+                    <form class="am-form tpl-form-line-form">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字" v-model="backbone_data_in_modal.name">
+                               
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
+                            <div class="am-u-sm-9">
+                                <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
+                                <textarea class="" rows="3" id="user-intro" placeholder="请输入描述"></textarea>        
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+              </slot>
+            </div>
+  
+            <!-- <div class="modal-footer">
+              <slot name="footer">
+                default footer
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </slot>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </transition>
+</script>
+  
+<script type="text/x-template" id="modal-activity-template">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+  
+            <div class="modal-header">
+              <slot name="header">
+                添加活动
+              </slot>
+              <i class="modal-default-close am-icon-remove" @click="$emit('close')"></i>
+            </div>
+  
+            <div class="modal-body">
+              <slot name="body">
+                <div class="tpl-form-body tpl-form-line">
+                    <form class="am-form tpl-form-line-form">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字">
+                               
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
+                            <div class="am-u-sm-9">
+                                <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
+                                <textarea class="" rows="3" id="user-intro" placeholder="请输入描述"></textarea>        
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+              </slot>
+            </div>
+  
+            <!-- <div class="modal-footer">
+              <slot name="footer">
+                default footer
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </slot>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </transition>
+</script>
+
+<script type="text/x-template" id="modal-task-template">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+  
+            <div class="modal-header">
+              <slot name="header">
+                添加任务
+              </slot>
+              <i class="modal-default-close am-icon-remove" @click="$emit('close')"></i>
+            </div>
+  
+            <div class="modal-body">
+              <slot name="body">
+                <div class="tpl-form-body tpl-form-line">
+                    <form class="am-form tpl-form-line-form">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字">
+                               
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
+                            <div class="am-u-sm-9">
+                                <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
+                                <textarea class="" rows="2" id="user-intro" placeholder="请输入描述"></textarea>        
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label class="am-u-sm-3 am-form-label">故事点 <span class="tpl-form-line-small-title">Storypoint</span></label>
+                            <div class="am-u-sm-9">
+                                <input type="number" placeholder="输入预估故事点">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-phone" class="am-u-sm-3 am-form-label">状态 <span class="tpl-form-line-small-title">Status</span></label>
+                            <div class="am-u-sm-9">
+                            
+                                <el-select v-model="value6" placeholder="请选择" size="medium" clearable>
+                                    <el-option
+                                    v-for="item in cities"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    <span style="float: left">{{ item.label }}</span>
+                                    <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                                    </el-option>
+                                </el-select>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+              </slot>
+            </div>
+  
+            <!-- <div class="modal-footer">
+              <slot name="footer">
+                default footer
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </slot>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </transition>
+</script>
+
+<script type="text/x-template" id="modal-develop-template">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+  
+            <div class="modal-header">
+              <slot name="header">
+                添加发行周期
+              </slot>
+              <i class="modal-default-close am-icon-remove" @click="$emit('close')"></i>
+            </div>
+  
+            <div class="modal-body">
+              <slot name="body">
+                <div class="tpl-form-body tpl-form-line">
+                    <form class="am-form tpl-form-line-form">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
+                            <div class="am-u-sm-9">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字">
+                               
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
+                            <div class="am-u-sm-9">
+                                <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
+                                <textarea class="" rows="2" id="user-intro" placeholder="请输入描述"></textarea>        
+                            </div>
+                        </div>
+                        
+                        <div class="am-form-group">
+                            <label for="user-email" class="am-u-sm-3 am-form-label">发布时间 <span class="tpl-form-line-small-title">Time</span></label>
+                            <div class="am-u-sm-9">
+                                <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="发布时间" data-am-datepicker="" readonly/>
+                                <small>发布时间为必填</small> -->
+                                <div class="block">
+                                    <el-date-picker
+
+                                      v-model="value7"
+                                      type="datetimerange"
+                                      align="right"
+                                      start-placeholder="开始日期"
+                                      end-placeholder="结束日期"
+                                      :default-time="['8:00:00', '18:00:00']">
+                                    </el-date-picker>
+                                  </div>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+              </slot>
+            </div>
+  
+            <!-- <div class="modal-footer">
+              <slot name="footer">
+                default footer
+                <button class="modal-default-button" @click="$emit('close')">
+                  OK
+                </button>
+              </slot>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </transition>
+</script>
+
+<script>
+
+    //注册组件
+    Vue.component('back-bone-component', {
+        template: '#back_bone_component',
+        props:['backbone_card'],
+        data() {
+            return{
+                id:"",
+                name:"七个字骨干故事",
+                description:"我是详细描述",
+                creator:"",
+            }
+        },
+        methods:{
+            doubleclick:function(){
+                this.$emit('doubleclick',this.id,this.name,this.description);
+            },
+            
+        }
+    });
+
+    Vue.component('activity-component', {
+        template: '#activity_component',
+        props:['activity_card'],
+        data() {
+            return {
+             
+            }
+        },
+        methods:{
+            doubleclick:function(){
+                this.$emit('doubleclick',this.id,this.name,this.description);
+            },
+            
+        }
+    });
+
+    Vue.component('task-component', {
+        template: '#task_component',
+        props:['task_card'],
+        data() {
+            return {
+             
+            }
+        },
+        methods:{
+            doubleclick:function(){
+                this.$emit('doubleclick',this.task);
+            },
+            
+        }
+    });
+   
+    Vue.component('backbone-modal', {
+        template: '#modal-backbone-template',
+        props: ['backbone_data_in_modal'],
+        data() {
+            return {
+             
+            }
+        },
+
+    });
+   
+    Vue.component('activity-modal', {
+        template: '#modal-activity-template'
+    });
+   
+    Vue.component('task-modal', {
+        template: '#modal-task-template',
+        data() {
+            return {
+                cities: [{
+          value: 'Ready',
+          label: '未开始'
+        }, {
+          value: 'Doing',
+          label: '正在进行'
+        }, {
+          value: 'Done',
+          label: '已完成'
+        }],
+           value6: '',
+      };
+    }
+    });
+   
+    Vue.component('develop-modal', {
+        template: '#modal-develop-template',
+        data() {
+            return {
+                value7: '',
+      };
+    }
+    });
+
+
+    //创建根结点
+    new Vue({
+        el: '#app',
+        data: {
+            basepath:"http://172.19.240.113/ui/",
+            userId: 0,
+            userName: "sweets",
+            story_count: 0,
+            backboneList: [],
+            backboneObject: {
+                "name": "骨干故事",
+                "creator": this.userId,
+                "description": "详细详细描述",
+                "sequence_id": 0,
+                "id": null,
+                "activityList":[],
+
+            },
+            activityObject: {
+                "name": "我是活动",
+                "creator": "0",
+                "comment": "我是很长很长的描述",
+                "backbone_id": "0",
+                "sequence_id": "1",
+                "id": null,
+                taskList:[]
+            },
+            newactivityObject: {
+                "name": "我是活动",
+                "creator": "0",
+                "comment": "我是很长很长的描述",
+                "backbone_id": "0",
+                "sequence_id": "1",
+                "id": null,
+                taskList:[]
+            },
+            taskObject: {
+                "name": "''",
+                "creator": "''",
+                "comment": "''",
+                "activity_id": "",
+                "sequence_id": 1,
+                "story_point": 0,
+                "status": "undo",
+                "phrase_id": "0",
+                "story_id": ""
+            },
+
+            showBackBoneModal: 0,    // 0 -关闭 1-新增 2-修改
+            showActivityModal: 0,
+            showTaskModal: 0,
+            showDevelopModal:0,
+
+        },
+        methods: {
+            indexs: function () {
+                this.backboneObject.activityList.push(this.activityObject);
+
+                this.activityObject.taskList.push(this.taskObject);
+                this.backboneObject.activityList.push(this.newactivityObject);
+                
+                this.backboneObject.activityList.push(this.activityObject);
+                this.backboneList.push(this.backboneObject);
+                this.backboneList.push(this.backboneObject);
+                this.backboneList.push(this.backboneObject);
+                this.backboneList.push(this.backboneObject);
+            },
+            addBackBone: function () {
+                this.backboneList.push(this.activityObject);
+            },
+            updatebackbone:function(id,name,description){
+                console.log("骨干故事的id，name，desc是 "+id,name,description)
+                this.showBackBoneModal = 2
+            },
+            updateactivity:function(id,name,description){
+                console.log("活动的id，name，desc是 "+id,name,description)
+                this.showActivityModal = 2
+            },
+            updatetask:function(id,name,description){
+                console.log("任务的id，name，desc是 "+id,name,description)
+                this.showTaskModal = 2
+            },
+            getAllData:function() {
+            }
+        },
+        created() {
+            //自动加载indexs方法
+            this.indexs();
+            this.getAllData();
+        }
+    })
+</script>
+
+
