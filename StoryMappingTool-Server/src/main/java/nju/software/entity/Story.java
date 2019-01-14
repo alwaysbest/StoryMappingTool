@@ -1,7 +1,7 @@
 package nju.software.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -28,6 +28,9 @@ public class Story {
     @Column(name = "release_id")
     private int releaseId;
 
+    @Column(name = "sequence_id")
+    private int sequenceId;
+
     @Column(name = "title")
     private String title;
 
@@ -35,7 +38,7 @@ public class Story {
     private String description;
 
     @Column(name = "points")
-    private Integer points;
+    private int points;
 
     @Column(name = "start")
     private Date start;
@@ -45,7 +48,7 @@ public class Story {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private StoryStatus status;
+    private Status status;
 
     public int getId() {
         return id;
@@ -87,6 +90,14 @@ public class Story {
         this.releaseId = releaseId;
     }
 
+    public int getSequenceId() {
+        return sequenceId;
+    }
+
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -103,11 +114,11 @@ public class Story {
         this.description = description;
     }
 
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 
-    public void setPoints(Integer points) {
+    public void setPoints(int points) {
         this.points = points;
     }
 
@@ -127,68 +138,28 @@ public class Story {
         this.end = end;
     }
 
-
-    public StoryStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StoryStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Story story = (Story) o;
-        return id == story.id &&
-                projectId == story.projectId &&
-                epicId == story.epicId &&
-                activityId == story.activityId &&
-                releaseId == story.releaseId &&
-                Objects.equals(title, story.title) &&
-                Objects.equals(description, story.description) &&
-                Objects.equals(points, story.points) &&
-                Objects.equals(start, story.start) &&
-                Objects.equals(end, story.end) &&
-                Objects.equals(status, story.status);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, projectId, epicId, activityId, releaseId, title, description, points, start, end, status);
-    }
-
-    @Override
-    public String toString() {
-        return "Story{" +
-                "id=" + id +
-                ", projectId=" + projectId +
-                ", epicId=" + epicId +
-                ", activityId=" + activityId +
-                ", releaseId=" + releaseId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", points=" + points +
-                ", start=" + start +
-                ", end=" + end +
-                ", status=" + status +
-                '}';
-    }
-
-    public Story() {
-    }
-
-    public Story(int projectId, int epicId, int activityId, int releaseId, String title, String description, Integer points, Date start, Date end, StoryStatus status) {
+    public Story(int projectId, int epicId, int activityId, int releaseId, int sequenceId, String title, String description, int points, Date start, Date end, Status status) {
         this.projectId = projectId;
         this.epicId = epicId;
         this.activityId = activityId;
         this.releaseId = releaseId;
+        this.sequenceId = sequenceId;
         this.title = title;
         this.description = description;
         this.points = points;
         this.start = start;
         this.end = end;
         this.status = status;
+    }
+
+    public Story() {
     }
 }

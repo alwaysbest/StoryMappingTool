@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Time       : 2019/1/8 8:03 PM
  * Author     : tangdaye
@@ -14,11 +16,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
     /**
-        Description: 根据方法名解析的查询，通过email查询是否存在用户
-        Input:       email
-        Output:      如果存在，返回用户，否则返回Null
-    */
+     * Description: 根据方法名解析的查询，通过email查询是否存在用户
+     * Input:       email
+     * Output:      如果存在，返回用户，否则返回Null
+     */
     User findUserByEmail(String email);
 
     User findUserByEmailAndPasswd(String email, String passwd);
+
+    @Query("select u from User u,UserProject up where u.id=up.userId and up.projectId=?1")
+    List<User> findUsersByProjectId(int projectId);
 }

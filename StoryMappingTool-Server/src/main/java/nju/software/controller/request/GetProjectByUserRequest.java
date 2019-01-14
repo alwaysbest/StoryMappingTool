@@ -6,13 +6,13 @@ package nju.software.controller.request;
  * Description: /project request
  */
 public class GetProjectByUserRequest {
-    private String userId;
+    private int userId;
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 }

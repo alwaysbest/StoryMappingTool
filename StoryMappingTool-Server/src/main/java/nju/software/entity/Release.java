@@ -18,6 +18,9 @@ public class Release {
     @Column(name = "project_id")
     private int projectId;
 
+    @Column(name = "sequence_id")
+    private int sequenceId;
+
     @Column(name = "title")
     private String title;
 
@@ -30,15 +33,21 @@ public class Release {
     @Column(name = "end")
     private Date end;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     public Release() {
     }
 
-    public Release(int projectId, String title, String description, Date start, Date end) {
+    public Release(int projectId, int sequenceId, String title, String description, Date start, Date end, Status status) {
         this.projectId = projectId;
+        this.sequenceId = sequenceId;
         this.title = title;
         this.description = description;
         this.start = start;
         this.end = end;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -55,6 +64,14 @@ public class Release {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public int getSequenceId() {
+        return sequenceId;
+    }
+
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public String getTitle() {
@@ -89,15 +106,25 @@ public class Release {
         this.end = end;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Release{" +
                 "id=" + id +
-                ", projectId='" + projectId + '\'' +
+                ", projectId=" + projectId +
+                ", sequenceId=" + sequenceId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", start=" + start +
                 ", end=" + end +
+                ", status=" + status +
                 '}';
     }
 }

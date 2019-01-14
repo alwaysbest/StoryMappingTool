@@ -17,6 +17,9 @@ public class Epic {
     @Column(name = "project_id")
     private int projectId;
 
+    @Column(name = "sequence_id")
+    private int sequenceId;
+
     @Column(name = "title")
     private String title;
 
@@ -26,8 +29,9 @@ public class Epic {
     public Epic() {
     }
 
-    public Epic(int projectId, String title, String description) {
+    public Epic(int projectId, int sequenceId, String title, String description) {
         this.projectId = projectId;
+        this.sequenceId = sequenceId;
         this.title = title;
         this.description = description;
     }
@@ -46,6 +50,14 @@ public class Epic {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public int getSequenceId() {
+        return sequenceId;
+    }
+
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public String getTitle() {
@@ -68,7 +80,8 @@ public class Epic {
     public String toString() {
         return "Epic{" +
                 "id=" + id +
-                ", projectId='" + projectId + '\'' +
+                ", projectId=" + projectId +
+                ", sequenceId=" + sequenceId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';

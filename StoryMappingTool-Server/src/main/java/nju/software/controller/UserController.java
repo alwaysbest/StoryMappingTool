@@ -33,11 +33,11 @@ public class UserController {
         String email = request.getEmail();
         String password = request.getPassword();
         if (!service.existUser(email)) {
-            response.setStatus("USER_NOT_EXIST");
+            response.setStatus("USER NOT EXIST");
         } else {
             User user = service.validateUser(email, password);
             if (user == null) {
-                response.setStatus("WRONG_PASSWORD");
+                response.setStatus("WRONG PASSWORD");
             } else {
                 response.setId(user.getId());
                 response.setUsername(user.getUsername());

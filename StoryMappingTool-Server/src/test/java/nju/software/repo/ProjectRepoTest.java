@@ -7,24 +7,28 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-
 import static org.junit.Assert.*;
 
+import javax.annotation.Resource;
+
 /**
- * Time       : 2019/1/9 12:40 AM
+ * Time       : 2019/1/13 5:37 PM
  * Author     : tangdaye
- * Description: 故事数据层单元测试
+ * Description: 项目数据层单元测试
  */
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
-public class StoryRepoTest {
+public class ProjectRepoTest {
     @Resource
-    StoryRepo storyRepo;
+    ProjectRepo repo;
 
     @Test
     @Transactional
     public void test1() {
-        storyRepo.findStoriesByProjectId(1);
+        assertEquals(1, repo.findProjectsByUserId(1).size());
+        assertEquals("xixixi", repo.findProjectsByUserId(1).get(0).getTitle());
     }
+
 }

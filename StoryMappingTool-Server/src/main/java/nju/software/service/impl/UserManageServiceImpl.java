@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Time       : 2019/1/9 8:00 PM
@@ -20,10 +21,15 @@ public class UserManageServiceImpl implements UserManageService {
     private UserRepo repo;
 
     @Override
-    public Boolean existUser(String email) {
+    public boolean existUser(String email) {
         User user = repo.findUserByEmail(email);
-        System.out.println(user);
         return user != null && user.getVerificationCode() == null;
+    }
+
+    @Override
+    public boolean existUser(int id) {
+        Optional<User> userDtoOptional = repo.findById(id);
+        return userDtoOptional.isPresent() && userDtoOptional.get().getVerificationCode() == null;
     }
 
     @Override
@@ -33,7 +39,7 @@ public class UserManageServiceImpl implements UserManageService {
     }
 
     @Override
-    public Boolean generateVerificationCode(String email) {
+    public boolean generateVerificationCode(String email) {
         User userDto = repo.findUserByEmail(email);
         User user = null;
         if (userDto != null) {
@@ -55,7 +61,7 @@ public class UserManageServiceImpl implements UserManageService {
     }
 
     @Override
-    public Boolean register(String username, String email, String password, String code) {
+    public boolean register(String username, String email, String password, String code) {
         User userDto = repo.findUserByEmail(email);
         if (userDto == null || !userDto.getVerificationCode().equals(code)) {//如果不存在或者验证码不一致
             return false;

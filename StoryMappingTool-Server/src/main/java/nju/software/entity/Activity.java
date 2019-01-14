@@ -17,6 +17,9 @@ public class Activity {
     @Column(name = "project_id")
     private int projectId;
 
+    @Column(name = "sequence_id")
+    private int sequenceId;
+
     @Column(name = "epic_id")
     private int epicId;
 
@@ -29,9 +32,10 @@ public class Activity {
     public Activity() {
     }
 
-    public Activity(int projectId, int epicId, String title, String description) {
+    public Activity(int projectId, int epicId, int sequenceId, String title, String description) {
         this.projectId = projectId;
         this.epicId = epicId;
+        this.sequenceId = sequenceId;
         this.title = title;
         this.description = description;
     }
@@ -50,6 +54,14 @@ public class Activity {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public int getSequenceId() {
+        return sequenceId;
+    }
+
+    public void setSequenceId(int sequenceId) {
+        this.sequenceId = sequenceId;
     }
 
     public int getEpicId() {
@@ -80,8 +92,9 @@ public class Activity {
     public String toString() {
         return "Activity{" +
                 "id=" + id +
-                ", projectId='" + projectId + '\'' +
-                ", epicId='" + epicId + '\'' +
+                ", projectId=" + projectId +
+                ", sequenceId=" + sequenceId +
+                ", epicId=" + epicId +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';

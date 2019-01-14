@@ -3,6 +3,12 @@ package nju.software.util;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 /**
  * Time       : 2019/1/9 5:25 PM
@@ -25,6 +31,22 @@ public class StringUtil {
             builder.append(chars.charAt(randomIndex));
         }
         return builder.toString();
+    }
+
+    public static boolean isNumeric(String str) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        return isNum.matches();
+    }
+
+    public static Date string2Date(String str) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        try {
+            return sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
     }
 
 }
