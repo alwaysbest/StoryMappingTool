@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,9 +46,25 @@ public class StringUtil {
         try {
             return sdf.parse(str);
         } catch (ParseException e) {
-            e.printStackTrace();
+            return new Date();
+//            e.printStackTrace();
         }
-        return new Date();
     }
+
+    public static void main(String[] args) {
+        List<Integer> test = new ArrayList<Integer>();
+        int[] a = {7, 3, 2, 4, 6, 5, 1};
+        for (int i = 0; i < 7; i++) {
+            int j = 0;
+            for (; j < test.size(); j++) {
+                if (test.get(j) >= a[i]) {
+                    break;
+                }
+            }
+            test.add(j, a[i]);
+        }
+        System.out.println(test);
+    }
+
 
 }

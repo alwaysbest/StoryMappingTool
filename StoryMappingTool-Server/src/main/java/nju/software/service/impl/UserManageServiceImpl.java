@@ -3,6 +3,7 @@ package nju.software.service.impl;
 import nju.software.entity.User;
 import nju.software.repo.UserRepo;
 import nju.software.service.UserManageService;
+import nju.software.util.EmailUtil;
 import nju.software.util.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,10 @@ public class UserManageServiceImpl implements UserManageService {
         user.setEmail(email);
         String code = StringUtil.generateRandomString(4);
         // todo 发送邮件
+//        boolean flag = EmailUtil.sendEmail(email,code,"");
+//        if (!flag){
+//            return false;
+//        }
         user.setVerificationCode(code);
         User result = repo.saveAndFlush(user);
         return result != null;

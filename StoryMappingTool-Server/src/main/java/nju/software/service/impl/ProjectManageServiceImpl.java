@@ -51,12 +51,12 @@ public class ProjectManageServiceImpl implements ProjectManageService {
 
     @Override
     public List<Release> getReleasesByProject(int projectId) {
-        return releaseRepo.findReleasesByProjectId(projectId);
+        return releaseRepo.findReleasesByProjectIdOrderBySequenceId(projectId);
     }
 
     @Override
     public List<Epic> getEpicsByProject(int projectId) {
-        return epicRepo.findEpicsByProjectId(projectId);
+        return epicRepo.findEpicsByProjectIdOrderBySequenceId(projectId);
     }
 
     @Override
@@ -91,6 +91,9 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     @Override
     public boolean inviteMember(int projectId, String email) {
         User userDto = userRepo.findUserByEmail(email);
+        if (userDto == null) {
+            return false;
+        }
         UserProject userProjectDto = userProjectRepo.findUserProjectByUserIdAndProjectId(userDto.getId(), projectId);
         if (userProjectDto != null) {
             return false;

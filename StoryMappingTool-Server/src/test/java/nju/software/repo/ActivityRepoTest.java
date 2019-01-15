@@ -1,6 +1,7 @@
 package nju.software.repo;
 
 import nju.software.App;
+import nju.software.entity.Activity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,23 +9,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 /**
- * Time       : 2019/1/9 12:40 AM
+ * Time       : 2019/1/15 2:50 PM
  * Author     : tangdaye
- * Description: 故事数据层单元测试
+ * Description: 活动数据层测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
-public class StoryRepoTest {
+public class ActivityRepoTest {
     @Resource
-    StoryRepo storyRepo;
+    ActivityRepo repo;
 
     @Test
     @Transactional
     public void test1() {
-        assertEquals(1, storyRepo.findStoriesByProjectId(1).size());
+        List<Activity> activityList = repo.findActivitiesByProjectId(1);
+        assertEquals(2, activityList.size());
     }
 }

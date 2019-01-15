@@ -9,7 +9,7 @@ import java.util.Date;
  * Description: 迭代周期实体类
  */
 @Entity
-@Table(name = "release")
+@Table(name = "sprint")
 public class Release {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

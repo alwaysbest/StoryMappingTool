@@ -6,4 +6,7 @@ package nju.software.util;
  * Description: 邮件工具类
  */
 public class EmailUtil {
+    public static boolean sendEmail(String address, String title, String content) {
+        return false;
+    }
 }

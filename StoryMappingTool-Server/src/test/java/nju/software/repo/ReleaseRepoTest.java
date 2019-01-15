@@ -9,22 +9,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Time       : 2019/1/9 12:40 AM
+ * Time       : 2019/1/15 2:50 PM
  * Author     : tangdaye
- * Description: 故事数据层单元测试
+ * Description: 活动数据层测试
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
-public class StoryRepoTest {
+public class ReleaseRepoTest {
     @Resource
-    StoryRepo storyRepo;
+    ReleaseRepo repo;
 
     @Test
     @Transactional
     public void test1() {
-        assertEquals(1, storyRepo.findStoriesByProjectId(1).size());
+        assertEquals("release_1_1_title", repo.findReleasesByProjectIdOrderBySequenceId(1).get(0).getTitle());
     }
 }

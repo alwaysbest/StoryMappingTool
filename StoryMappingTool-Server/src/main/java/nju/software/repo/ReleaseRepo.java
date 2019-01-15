@@ -13,5 +13,5 @@ import java.util.List;
  */
 @Repository
 public interface ReleaseRepo extends JpaRepository<Release, Integer> {
-    List<Release> findReleasesByProjectId(int projectId);
+    List<Release> findReleasesByProjectIdOrderBySequenceId(int projectId);
 }

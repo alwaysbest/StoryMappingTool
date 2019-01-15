@@ -93,9 +93,9 @@ public class ProjectController {
         response.setStatus("SUCCESS");
         response.setId(idInt);
         response.setMemberList(projectManageService.getMembersByProject(idInt));
-        response.setEpicList(projectManageService.getEpicsByProject(idInt));
-        response.setActivityList(projectManageService.getActivitiesByProject(idInt));
-        response.setStoryList(projectManageService.getStoriesByProject(idInt));
+        response.setEpicList(projectManageService.getEpicsByProject(idInt),
+                projectManageService.getActivitiesByProject(idInt),
+                projectManageService.getStoriesByProject(idInt));
         response.setReleaseList(projectManageService.getReleasesByProject(idInt));
         return response;
     }
@@ -217,7 +217,7 @@ public class ProjectController {
 
     @RequestMapping(value = "/project/{id}/release", method = RequestMethod.POST)
     public CreateOrUpdateReleaseResponse createOrUpdateRelease(@PathVariable String id,
-                                                           @RequestBody CreateOrUpdateReleaseRequest request) {
+                                                               @RequestBody CreateOrUpdateReleaseRequest request) {
         CreateOrUpdateReleaseResponse response = new CreateOrUpdateReleaseResponse();
         if (!StringUtil.isNumeric(id)) {
             response.setStatus("FAILURE");

@@ -13,5 +13,5 @@ import java.util.List;
  */
 @Repository
 public interface EpicRepo extends JpaRepository<Epic, Integer> {
-    List<Epic> findEpicsByProjectId(int projectId);
+    List<Epic> findEpicsByProjectIdOrderBySequenceId(int projectId);
 }

@@ -1,10 +1,13 @@
 package nju.software.controller.response;
 
+import nju.software.controller.vo.ActivityVO;
+import nju.software.controller.vo.EpicVO;
 import nju.software.entity.Activity;
 import nju.software.entity.Epic;
 import nju.software.entity.Release;
 import nju.software.entity.Story;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,14 +16,15 @@ import java.util.List;
  * Description: /project/{id} response
  */
 public class GetProjectResponse {
-    // todo 结构化 1月14日晚
     private String status;
     private int id;
-    private List<Epic> epicList;
-    private List<Activity> activityList;
-    private List<Story> storyList;
+    private List<EpicVO> epicList;
     private List<Release> releaseList;
     private List<String[]> memberList;
+
+    public GetProjectResponse() {
+        this.epicList = new ArrayList<>();
+    }
 
     public String getStatus() {
         return status;
@@ -38,28 +42,40 @@ public class GetProjectResponse {
         this.id = id;
     }
 
-    public List<Epic> getEpicList() {
+    public List<EpicVO> getEpicList() {
         return epicList;
     }
 
-    public void setEpicList(List<Epic> epicList) {
-        this.epicList = epicList;
-    }
+    public void setEpicList(List<Epic> epicList, List<Activity> activityList, List<Story> storyList) {
+        for (Epic epic : epicList) {
+            if (epic.getProjectId() == this.getId()) {
+                EpicVO epicVO = new EpicVO();
+                epicVO.setId(epic.getId());
+                epicVO.setProjectId(epic.getProjectId());
+                epicVO.setSequenceId(epic.getSequenceId());
+                epicVO.setTitle(epic.getTitle());
+                epicVO.setDescription(epic.getDescription());
+                for (Activity activity : activityList) {
+                    if (activity.getEpicId() == epic.getId()) {
+                        ActivityVO activityVO = new ActivityVO();
+                        activityVO.setId(activity.getId());
+                        activityVO.setProjectId(activity.getProjectId());
+                        activityVO.setEpicId(activity.getEpicId());
+                        activityVO.setSequenceId(activity.getSequenceId());
+                        activityVO.setTitle(activity.getTitle());
+                        activityVO.setDescription(activity.getDescription());
+                        for (Story story : storyList) {
+                            if (story.getActivityId() == activityVO.getId()) {
+                                activityVO.addStory(story);
+                            }
+                        }
+                        epicVO.addActivity(activityVO);
+                    }
+                }
+                this.addEpic(epicVO);
+            }
+        }
 
-    public List<Activity> getActivityList() {
-        return activityList;
-    }
-
-    public void setActivityList(List<Activity> activityList) {
-        this.activityList = activityList;
-    }
-
-    public List<Story> getStoryList() {
-        return storyList;
-    }
-
-    public void setStoryList(List<Story> storyList) {
-        this.storyList = storyList;
     }
 
     public List<Release> getReleaseList() {
@@ -77,4 +93,16 @@ public class GetProjectResponse {
     public void setMemberList(List<String[]> memberList) {
         this.memberList = memberList;
     }
+
+    //按sequence id添加
+    private void addEpic(EpicVO vo) {
+        int j = 0;
+        for (; j < this.epicList.size(); j++) {
+            if (this.epicList.get(j).getSequenceId() > vo.getSequenceId()) {
+                break;
+            }
+        }
+        this.epicList.add(j, vo);
+    }
+
 }
