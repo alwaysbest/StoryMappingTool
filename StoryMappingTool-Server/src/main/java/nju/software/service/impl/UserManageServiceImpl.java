@@ -56,7 +56,7 @@ public class UserManageServiceImpl implements UserManageService {
         user.setEmail(email);
         String code = StringUtil.generateRandomString(4);
         // todo 发送邮件
-        boolean flag = EmailUtil.sendEmail(email,code,"");
+        boolean flag = EmailUtil.sendEmail(email, code, "");
 //        if (!flag){
 //            return false;
 //        }
@@ -68,7 +68,7 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public boolean register(String username, String email, String password, String code) {
         User userDto = repo.findUserByEmail(email);
-        if (userDto == null || !userDto.getVerificationCode().equals(code)) {//如果不存在或者验证码不一致
+        if (userDto == null || userDto.getVerificationCode() == null || !userDto.getVerificationCode().equals(code)) {//如果不存在或者验证码不一致
             return false;
         }
         userDto.setUsername(username);

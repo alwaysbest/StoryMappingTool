@@ -1,5 +1,6 @@
 package nju.software.controller.response;
 
+import lombok.*;
 import nju.software.controller.vo.ActivityVO;
 import nju.software.controller.vo.EpicVO;
 import nju.software.entity.Activity;
@@ -15,6 +16,7 @@ import java.util.List;
  * Author     : tangdaye
  * Description: /project/{id} response
  */
+@Data
 public class GetProjectResponse {
     private String status;
     private int id;
@@ -24,26 +26,6 @@ public class GetProjectResponse {
 
     public GetProjectResponse() {
         this.epicList = new ArrayList<>();
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public List<EpicVO> getEpicList() {
-        return epicList;
     }
 
     public void setEpicList(List<Epic> epicList, List<Activity> activityList, List<Story> storyList) {
@@ -76,22 +58,6 @@ public class GetProjectResponse {
             }
         }
 
-    }
-
-    public List<Release> getReleaseList() {
-        return releaseList;
-    }
-
-    public void setReleaseList(List<Release> releaseList) {
-        this.releaseList = releaseList;
-    }
-
-    public List<String[]> getMemberList() {
-        return memberList;
-    }
-
-    public void setMemberList(List<String[]> memberList) {
-        this.memberList = memberList;
     }
 
     //按sequence id添加

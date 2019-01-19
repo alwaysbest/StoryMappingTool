@@ -43,6 +43,12 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!--Lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+        </dependency>
         <!--SpringBoot Web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

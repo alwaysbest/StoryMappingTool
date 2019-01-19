@@ -1,5 +1,7 @@
 package nju.software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
  * Author     : tangdaye
  * Description: 用户和项目关系实体
  */
+@Data
 @Entity
 @Table(name = "user_project")
 public class UserProject {
@@ -21,44 +24,6 @@ public class UserProject {
     @Column(name = "project_id")
     private int projectId;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserProject that = (UserProject) o;
-        return id == that.id &&
-                userId == that.userId &&
-                projectId == that.projectId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, userId, projectId);
-    }
 
     public UserProject() {
     }

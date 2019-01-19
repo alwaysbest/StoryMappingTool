@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * Time       : 2019/1/15 2:50 PM
@@ -27,8 +27,22 @@ public class EpicRepoTest {
     @Test
     @Transactional
     public void test1() {
-        assertEquals(2, repo.findEpicsByProjectIdOrderBySequenceId(1).size());
-        assertEquals(1, repo.findEpicsByProjectIdOrderBySequenceId(2).size());
-        assertEquals(1, repo.findEpicsByProjectIdOrderBySequenceId(3).size());
+        assertNotNull(repo.findEpicsByProjectIdOrderBySequenceId(1));
+        assertNotNull( repo.findEpicsByProjectIdOrderBySequenceId(2));
+        assertNotNull(repo.findEpicsByProjectIdOrderBySequenceId(3));
+    }
+
+    @Test
+    @Transactional
+    public void test2() {
+        int id = 2;
+        int projectId = 1;
+        int sequenceId = 3;
+        String title = "test epic title2";
+        String description = "test epic description2";
+        Epic epic = new Epic(projectId, sequenceId, title, description);
+        epic.setId(id);
+        Epic dto = repo.saveAndFlush(epic);
+        System.out.println(dto);
     }
 }

@@ -1,5 +1,7 @@
 package nju.software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.*;
  * Author     : tangdaye
  * Description: 二级卡片实体类
  */
+@Data
 @Entity
 @Table(name = "activity")
 public class Activity {
@@ -40,63 +43,4 @@ public class Activity {
         this.description = description;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public int getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    public int getSequenceId() {
-        return sequenceId;
-    }
-
-    public void setSequenceId(int sequenceId) {
-        this.sequenceId = sequenceId;
-    }
-
-    public int getEpicId() {
-        return epicId;
-    }
-
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return "Activity{" +
-                "id=" + id +
-                ", projectId=" + projectId +
-                ", sequenceId=" + sequenceId +
-                ", epicId=" + epicId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

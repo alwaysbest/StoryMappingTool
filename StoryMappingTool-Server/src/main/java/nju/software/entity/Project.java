@@ -1,5 +1,7 @@
 package nju.software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.*;
  * Author     : tangdaye
  * Description: 项目实体类
  */
+@Data
 @Entity
 @Table(name = "project")
 public class Project {

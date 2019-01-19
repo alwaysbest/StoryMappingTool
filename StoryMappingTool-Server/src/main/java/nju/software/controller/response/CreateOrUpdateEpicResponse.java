@@ -1,5 +1,6 @@
 package nju.software.controller.response;
 
+import lombok.*;
 import nju.software.entity.Epic;
 
 /**
@@ -7,24 +8,10 @@ import nju.software.entity.Epic;
  * Author     : tangdaye
  * Description: /ui/project/{id}/epic response
  */
+@Data
 public class CreateOrUpdateEpicResponse {
     private String status;
 
     private Epic epic;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Epic getEpic() {
-        return epic;
-    }
-
-    public void setEpic(Epic epic) {
-        this.epic = epic;
-    }
 }

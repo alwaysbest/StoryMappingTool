@@ -91,86 +91,83 @@ public class ProjectController {
             return response;
         }
         response.setStatus("SUCCESS");
-        response.setId(idInt);
-        response.setMemberList(projectManageService.getMembersByProject(idInt));
-        response.setEpicList(projectManageService.getEpicsByProject(idInt),
-                projectManageService.getActivitiesByProject(idInt),
-                projectManageService.getStoriesByProject(idInt));
-        response.setReleaseList(projectManageService.getReleasesByProject(idInt));
+        setProject(response, idInt);
         return response;
     }
 
     @RequestMapping(value = "/project/{id}/epic", method = RequestMethod.POST)
-    public CreateOrUpdateEpicResponse createOrUpdateEpic(@PathVariable String id,
-                                                         @RequestBody CreateOrUpdateEpicRequest request) {
-        CreateOrUpdateEpicResponse response = new CreateOrUpdateEpicResponse();
+    public GetProjectResponse createOrUpdateEpic(@PathVariable String id,
+                                                 @RequestBody CreateOrUpdateEpicRequest request) {
+        GetProjectResponse response = new GetProjectResponse();
         if (!StringUtil.isNumeric(id)) {
             response.setStatus("FAILURE");
             return response;
         }
         int idInt = Integer.parseInt(id);
-        if (request.getEpicId() == 0) {
+        if (request.getId() == 0) {
             Epic epic = projectManageService.createEpic(idInt, request.getSequenceId(), request.getTitle(), request.getDescription());
             if (epic != null) {
                 response.setStatus("SUCCESS");
-                response.setEpic(epic);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         } else {
-            Epic epic = projectManageService.updateEpic(request.getEpicId(), idInt, request.getSequenceId(), request.getTitle(), request.getDescription());
+            Epic epic = projectManageService.updateEpic(request.getId(), idInt, request.getSequenceId(), request.getTitle(), request.getDescription());
             if (epic != null) {
                 response.setStatus("SUCCESS");
-                response.setEpic(epic);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         }
+        setProject(response, idInt);
         return response;
     }
 
     @RequestMapping(value = "/project/{id}/activity", method = RequestMethod.POST)
-    public CreateOrUpdateActivityResponse createOrUpdateActivity(@PathVariable String id,
-                                                                 @RequestBody CreateOrUpdateActivityRequest request) {
-        CreateOrUpdateActivityResponse response = new CreateOrUpdateActivityResponse();
+    public GetProjectResponse createOrUpdateActivity(@PathVariable String id,
+                                                     @RequestBody CreateOrUpdateActivityRequest request) {
+        GetProjectResponse response = new GetProjectResponse();
         if (!StringUtil.isNumeric(id)) {
             response.setStatus("FAILURE");
             return response;
         }
         int idInt = Integer.parseInt(id);
-        if (request.getActivityId() == 0) {
+        if (request.getId() == 0) {
             Activity activity = projectManageService.createActivity(idInt, request.getEpicId(), request.getSequenceId(),
                     request.getTitle(), request.getDescription());
             if (activity != null) {
                 response.setStatus("SUCCESS");
-                response.setActivity(activity);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         } else {
-            Activity activity = projectManageService.updateActivity(request.getActivityId(), idInt, request.getEpicId(),
+            Activity activity = projectManageService.updateActivity(request.getId(), idInt, request.getEpicId(),
                     request.getSequenceId(), request.getTitle(), request.getDescription());
             if (activity != null) {
                 response.setStatus("SUCCESS");
-                response.setActivity(activity);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         }
+        setProject(response, idInt);
         return response;
     }
 
     @RequestMapping(value = "/project/{id}/story", method = RequestMethod.POST)
-    public CreateOrUpdateStoryResponse createOrUpdateStory(@PathVariable String id,
-                                                           @RequestBody CreateOrUpdateStoryRequest request) {
-        CreateOrUpdateStoryResponse response = new CreateOrUpdateStoryResponse();
+    public GetProjectResponse createOrUpdateStory(@PathVariable String id,
+                                                  @RequestBody CreateOrUpdateStoryRequest request) {
+        GetProjectResponse response = new GetProjectResponse();
         if (!StringUtil.isNumeric(id)) {
             response.setStatus("FAILURE");
             return response;
         }
         int idInt = Integer.parseInt(id);
         Status[] statuses = {Status.UNDO, Status.DOING, Status.DONE};
-        if (request.getStoryId() == 0) {
+        if (request.getId() == 0) {
             Story story = projectManageService.createStory(
                     idInt,
                     request.getEpicId(),
@@ -186,13 +183,13 @@ public class ProjectController {
             );
             if (story != null) {
                 response.setStatus("SUCCESS");
-                response.setStory(story);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         } else {
             Story story = projectManageService.updateStory(
-                    request.getStoryId(),
+                    request.getId(),
                     idInt,
                     request.getEpicId(),
                     request.getActivityId(),
@@ -207,25 +204,26 @@ public class ProjectController {
             );
             if (story != null) {
                 response.setStatus("SUCCESS");
-                response.setStory(story);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         }
+        setProject(response, idInt);
         return response;
     }
 
     @RequestMapping(value = "/project/{id}/release", method = RequestMethod.POST)
-    public CreateOrUpdateReleaseResponse createOrUpdateRelease(@PathVariable String id,
-                                                               @RequestBody CreateOrUpdateReleaseRequest request) {
-        CreateOrUpdateReleaseResponse response = new CreateOrUpdateReleaseResponse();
+    public GetProjectResponse createOrUpdateRelease(@PathVariable String id,
+                                                    @RequestBody CreateOrUpdateReleaseRequest request) {
+        GetProjectResponse response = new GetProjectResponse();
         if (!StringUtil.isNumeric(id)) {
             response.setStatus("FAILURE");
             return response;
         }
         int idInt = Integer.parseInt(id);
         Status[] statuses = {Status.UNDO, Status.DOING, Status.DONE};
-        if (request.getReleaseId() == 0) {
+        if (request.getId() == 0) {
             Release release = projectManageService.createRelease(
                     idInt,
                     request.getSequenceId(),
@@ -237,13 +235,13 @@ public class ProjectController {
             );
             if (release != null) {
                 response.setStatus("SUCCESS");
-                response.setRelease(release);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         } else {
             Release release = projectManageService.updateRelease(
-                    request.getReleaseId(),
+                    request.getId(),
                     idInt,
                     request.getSequenceId(),
                     request.getTitle(),
@@ -254,12 +252,23 @@ public class ProjectController {
             );
             if (release != null) {
                 response.setStatus("SUCCESS");
-                response.setRelease(release);
             } else {
                 response.setStatus("FAILURE");
+                return response;
             }
         }
+        setProject(response, idInt);
         return response;
     }
+
+    private void setProject(GetProjectResponse response, int idInt) {
+        response.setId(idInt);
+        response.setMemberList(projectManageService.getMembersByProject(idInt));
+        response.setEpicList(projectManageService.getEpicsByProject(idInt),
+                projectManageService.getActivitiesByProject(idInt),
+                projectManageService.getStoriesByProject(idInt));
+        response.setReleaseList(projectManageService.getReleasesByProject(idInt));
+    }
+
 
 }

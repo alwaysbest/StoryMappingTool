@@ -1,5 +1,7 @@
 package nju.software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
@@ -9,6 +11,7 @@ import java.util.Objects;
  * Author     : tangdaye
  * Description: 三级故事实体类
  */
+@Data
 @Entity
 @Table(name = "story")
 public class Story {
@@ -49,102 +52,6 @@ public class Story {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private Status status;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    public int getEpicId() {
-        return epicId;
-    }
-
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
-    }
-
-    public int getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(int activityId) {
-        this.activityId = activityId;
-    }
-
-    public int getReleaseId() {
-        return releaseId;
-    }
-
-    public void setReleaseId(int releaseId) {
-        this.releaseId = releaseId;
-    }
-
-    public int getSequenceId() {
-        return sequenceId;
-    }
-
-    public void setSequenceId(int sequenceId) {
-        this.sequenceId = sequenceId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 
     public Story(int projectId, int epicId, int activityId, int releaseId, int sequenceId, String title, String description, int points, Date start, Date end, Status status) {
         this.projectId = projectId;

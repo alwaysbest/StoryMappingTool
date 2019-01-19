@@ -1,5 +1,6 @@
 package nju.software.controller.response;
 
+import lombok.*;
 import nju.software.entity.Story;
 
 /**
@@ -7,24 +8,10 @@ import nju.software.entity.Story;
  * Author     : tangdaye
  * Description: /ui/project/{id}/story response
  */
+@Data
 public class CreateOrUpdateStoryResponse {
     private String status;
 
     private Story story;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Story getStory() {
-        return story;
-    }
-
-    public void setStory(Story story) {
-        this.story = story;
-    }
 }

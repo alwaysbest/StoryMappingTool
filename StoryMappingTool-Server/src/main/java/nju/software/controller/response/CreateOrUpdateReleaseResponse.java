@@ -1,5 +1,6 @@
 package nju.software.controller.response;
 
+import lombok.*;
 import nju.software.entity.Release;
 
 /**
@@ -7,24 +8,10 @@ import nju.software.entity.Release;
  * Author     : tangdaye
  * Description: /ui/project/{id}/release response
  */
+@Data
 public class CreateOrUpdateReleaseResponse {
     private String status;
 
     private Release release;
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Release getRelease() {
-        return release;
-    }
-
-    public void setRelease(Release release) {
-        this.release = release;
-    }
 }
