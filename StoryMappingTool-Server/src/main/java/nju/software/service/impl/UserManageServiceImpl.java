@@ -56,7 +56,7 @@ public class UserManageServiceImpl implements UserManageService {
         user.setEmail(email);
         String code = StringUtil.generateRandomString(4);
         // todo 发送邮件
-//        boolean flag = EmailUtil.sendEmail(email,code,"");
+        boolean flag = EmailUtil.sendEmail(email,code,"");
 //        if (!flag){
 //            return false;
 //        }

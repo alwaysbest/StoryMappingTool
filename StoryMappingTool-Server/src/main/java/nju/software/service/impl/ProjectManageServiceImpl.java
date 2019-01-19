@@ -122,7 +122,7 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         epicDto.setSequenceId(sequenceId);
         epicDto.setTitle(title);
         epicDto.setDescription(description);
-        return epicRepo.save(epicDto);
+        return epicRepo.saveAndFlush(epicDto);
     }
 
     @Override

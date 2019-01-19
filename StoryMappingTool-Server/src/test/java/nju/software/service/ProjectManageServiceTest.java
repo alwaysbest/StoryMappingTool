@@ -100,7 +100,7 @@ public class ProjectManageServiceTest {
     }
 
     @Test
-    @Transactional
+//    @Transactional
     public void test11() {
         int id = 5;
         int projectId = 3;
