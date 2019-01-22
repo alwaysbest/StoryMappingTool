@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign up </title>
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <link rel="stylesheet" href="../static/css/index.css"/>
+    <link rel="stylesheet" href="../static/css/amazeui.min.css" />
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <link rel="stylesheet" href="../static/css/app.css">
+    <link rel="stylesheet" href="../static/css/storyboard.css">
+    <style>
+     html,body{
+        height:100%;
+        position:relative;
+    }
+     .el-col {
+        border-radius: 4px;
+    }
+    .bg-purple {
+        background: #d3dce6;
+    }
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+    #app{
+
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        width:50%;
+        margin:auto;
+        text-align:center;
+        padding-top:100px;
+
+    }
+    .box-card{
+
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        width:60%;
+        margin: auto;
+    }
+
+    </style>
+</head>
+<body>
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        <a href="javascript:;" class="tpl-logo">
+            <img src="../static/img/logo.png" alt="">
+        </a>
+    </div>
+
+</header>
+<div id="app">
+    <h2>欢迎登录StoryBoard</h2>
+    <el-card class="box-card">
+        <el-form :model="form" status-icon :rules="validateForm" ref="form" label-width="25%" label-position="left">
+            <el-form-item label="邮箱"prop="email">
+                <el-input type="text" v-model="form.email" auto-complete="off">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="密码"prop="password">
+                <el-input type="text" v-model="form.password" auto-complete="off">
+                </el-input>
+            </el-form-item>
+            <el-form-item >
+                <el-button type="success">确认登录</el-button>
+                <el-button type="default">未有账户？注册</el-button>
+            </el-form-item>
+        </el-form>
+    </el-card>
+</div>
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            validateForm:{
+                 email:[
+                    { required: true, message: '请输入邮箱', trigger: 'blur' },
+                 ],
+                 password:[
+                   { required: true, message: '请输入密码', trigger: 'blur' },
+                 ],
+
+
+
+
+            },
+            form:{
+                email:'',
+                password:'',
+
+            },
+
+        }
+    })
+</script>
+</body>
+</html>
