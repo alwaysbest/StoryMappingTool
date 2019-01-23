@@ -1,6 +1,7 @@
 package nju.software.service.impl;
 
 import nju.software.service.EmailService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,12 @@ public class EmailServiceImpl implements EmailService {
     @Resource
     private JavaMailSender mailSender;
 
+    @Value("${spring.mail.username}")
+    private String from;
+
     public boolean sendEmail(String address, String title, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("1138833148@qq.com");
+        message.setFrom(from);
         message.setTo(address);
         message.setSubject(title);
         message.setText(content);
