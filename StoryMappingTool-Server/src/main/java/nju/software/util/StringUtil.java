@@ -18,11 +18,10 @@ import java.util.regex.Pattern;
  * Description: 字符串工具类
  */
 public class StringUtil {
-    @Value("${md5.salt}")
-    private static String salt;
+    private static String salt="null";
 
     public static String getMD5(String password) {
-        return DigestUtils.md5Hex(password + salt);
+        return DigestUtils.md5Hex(password+salt);
     }
 
     public static String generateRandomString(int length) {

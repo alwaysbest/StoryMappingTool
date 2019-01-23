@@ -55,11 +55,10 @@ public class UserManageServiceImpl implements UserManageService {
         }
         user.setEmail(email);
         String code = StringUtil.generateRandomString(4);
-        // todo 发送邮件
-        boolean flag = EmailUtil.sendEmail(email, code, "");
-//        if (!flag){
-//            return false;
-//        }
+        boolean flag = EmailUtil.sendEmail(email, "Story Mapping Tool的验证码", code);
+        if (!flag) {
+            return false;
+        }
         user.setVerificationCode(code);
         User result = repo.saveAndFlush(user);
         return result != null;
