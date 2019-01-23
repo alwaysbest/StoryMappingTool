@@ -12,11 +12,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-        System.getProperties().put("proxySet", true);
-        System.getProperties().put("http.proxyHost", "219.219.113.223");
-        System.getProperties().put("http.proxyPort", "81");
-        System.getProperties().put("socksProxySet", true);
-        System.getProperties().put("socksProxyHost", "219.219.113.223");
-        System.getProperties().put("socksProxyPort", "81");
     }
 }
