@@ -21,11 +21,11 @@ public class EmailServiceTest {
     @Resource
     EmailService service;
 
-//    @Test
-//    public void test1() {
+    @Test
+    public void test1() {
 //        String address = "tangdaye1996@hotmail.com";
 //        String content = "ABCD";
 //        String title = "Story Mapping Tool的验证码";
 //        assertTrue(service.sendEmail(address, content, title));
-//    }
+    }
 }
