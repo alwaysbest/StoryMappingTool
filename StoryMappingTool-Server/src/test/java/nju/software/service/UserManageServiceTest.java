@@ -38,7 +38,7 @@ public class UserManageServiceTest {
     @Test
     @Transactional
     public void test3() {
-        assertTrue(service.generateVerificationCode("113883314@qq.com"));//新的邮箱，可以生成验证码
+        assertTrue(service.generateVerificationCode("tangdaye1996@hotmail.com"));//新的邮箱，可以生成验证码
         assertTrue(!service.generateVerificationCode("tdy_nju@163.com"));//已经验证过的邮箱，不能生成验证码
         assertTrue(!service.generateVerificationCode("MF1832144@smail.nju.edu.cn"));//已经验证过的邮箱，不能生成验证码
     }

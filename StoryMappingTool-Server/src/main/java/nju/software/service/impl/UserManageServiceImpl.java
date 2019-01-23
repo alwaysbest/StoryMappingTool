@@ -2,8 +2,8 @@ package nju.software.service.impl;
 
 import nju.software.entity.User;
 import nju.software.repo.UserRepo;
+import nju.software.service.EmailService;
 import nju.software.service.UserManageService;
-import nju.software.util.EmailUtil;
 import nju.software.util.StringUtil;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,8 @@ import java.util.Optional;
 public class UserManageServiceImpl implements UserManageService {
     @Resource
     private UserRepo repo;
+    @Resource
+    private EmailService emailService;
 
     @Override
     public boolean existUser(String email) {
@@ -55,7 +57,7 @@ public class UserManageServiceImpl implements UserManageService {
         }
         user.setEmail(email);
         String code = StringUtil.generateRandomString(4);
-        boolean flag = EmailUtil.sendEmail(email, "Story Mapping Tool的验证码", code);
+        boolean flag = emailService.sendEmail(email, "Story Mapping Tool的验证码", code);
         if (!flag) {
             return false;
         }

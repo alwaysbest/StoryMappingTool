@@ -82,6 +82,11 @@
             <artifactId>mail</artifactId>
             <version>1.4.4</version>
         </dependency>
+        <!--Spring mail-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
