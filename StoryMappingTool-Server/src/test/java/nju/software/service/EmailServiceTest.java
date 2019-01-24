@@ -25,7 +25,7 @@ public class EmailServiceTest {
 
     @Test
     public void test1() {
-        String address = "tangdaye1996@hotmail.com";
+        String address = "mf1832144@smail.nju.edu.cn";
         String content = "ABCD";
         String title = "Story Mapping Tool的验证码";
         assertTrue(service.sendEmail(address, title, content));
