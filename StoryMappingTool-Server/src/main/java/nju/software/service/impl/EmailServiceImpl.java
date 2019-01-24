@@ -22,12 +22,14 @@ public class EmailServiceImpl implements EmailService {
     private String from;
 
     public boolean sendEmail(String address, String title, String content) {
+        System.out.println("***************************sending email");
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(address);
         message.setSubject(title);
         message.setText(content);
         mailSender.send(message);
+        System.out.println("***************************sending email");
         return true;
     }
 }
