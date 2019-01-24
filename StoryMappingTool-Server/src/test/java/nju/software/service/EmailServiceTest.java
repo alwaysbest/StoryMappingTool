@@ -25,9 +25,9 @@ public class EmailServiceTest {
 
     @Test
     public void test1() {
-//        String address = "mf1832144@smail.nju.edu.cn";
-//        String content = "ABCD";
-//        String title = "Story Mapping Tool的验证码";
-//        assertTrue(service.sendEmail(address, title, content));
+        String address = "mf1832144@smail.nju.edu.cn";
+        String content = "ABCD";
+        String title = "Story Mapping Tool的验证码";
+        assertTrue(service.sendEmail(address, title, content));
     }
 }
