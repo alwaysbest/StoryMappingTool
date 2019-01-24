@@ -31,7 +31,7 @@ public class StringUtil {
             int randomIndex = (int) (Math.random() * (62));
             builder.append(chars.charAt(randomIndex));
         }
-        return builder.toString();
+        return "ABCD";
     }
 
     public static boolean isNumeric(String str) {
