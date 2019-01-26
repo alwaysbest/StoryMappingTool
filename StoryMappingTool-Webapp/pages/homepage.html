@@ -3,8 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <title>HomePage</title>
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <link rel="stylesheet" href="../static/css/index.css"/>
+    <link rel="stylesheet" href="../static/css/amazeui.min.css" />
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <link rel="stylesheet" href="../static/css/app.css">
+    <link rel="stylesheet" href="../static/css/storyboard.css">
+    <style>
+         html,body{
+        height:100%;
+        position:relative;
+        }
+    </style>
 </head>
 <body>
+
+<div id="app" class="tpl-page-container tpl-page-header-fixed">
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <div class="am-topbar-brand">
+            <a href="javascript:;" class="tpl-logo">
+                <img src="../static/img/logo.png" alt="">
+            </a>
+        </div>
+
+        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+
+                <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
+                        class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="tpl-header-list-user-nick">{{ username }}</span><span class="tpl-header-list-user-ico"> <img
+                            src="../static/img/user.png"></span>
+                    </a>
+                    <ul class="am-dropdown-content">
+                        <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
+                        <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
+                        <li><a href="login.html"><span class="am-icon-power-off"></span> 退出</a></li>
+                    </ul>
+                </li>
+                <li><a href="###" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
+            </ul>
+        </div>
+    </header>
+    <el-row>
+        <el-col :span="6" v-for="(project, index) in projectList" :key="project":offset="index>0?1:0">
+            <el-card :body-style="{ padding: '0px' }" shadow="hover">
+                <div style="padding: 14px;">
+                    <span>{{ project.title }}</span>
+                </div>
+            </el-card>
+        </el-col>
+    </el-row>
+
+</div>
+<script>
+new Vue({
+    el:"#app",
+    data:{
+        username:"",
+        uid:0,
+        projectList:[],
+        project:{
+            id:0,
+            creatorId:0,
+            title:"",
+            description:"",
+        }
+    },
+    methods:{
+        showName:function(){
+            if (sessionStorage.getItem('username')===null){
+                window.location.href="login.html";
+            }else{
+
+                this.username=sessionStorage.getItem('username');
+                this.uid=sessionStorage.getItem('uid');
+            }
+
+        },
+        getProject(){
+            var uid=sessionStorage.getItem('uid');
+            axios.post(
+                'http://172.19.240.113/ui/list-project',
+                 {userId:1},
+
+                {headers:{
+                            'Content-Type':'application/json'
+                            }
+                },
+            )
+            .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                             this.projectList=response.data.projectList;
+                         }else{
+                            this.$message.info('登录超时');
+                         }
+
+            })
+        }
+    },
+    created(){
+        this.showName();
+        this.getProject();
+    },
+});
+
+</script>
 
 </body>
 </html>
