@@ -1,4 +1,5 @@
 package nju.software.service;
+
 import nju.software.entity.User;
 
 /**
@@ -7,12 +8,14 @@ import nju.software.entity.User;
  * Description: 用户管理服务类
  */
 public interface UserManageService {
-    Boolean existUser(String email);
+    boolean existUser(String email);
+
+    boolean existUser(int id);
 
     User validateUser(String email, String password);
 
-    Boolean generateVerificationCode(String email);
+    boolean generateVerificationCode(String email);
 
-    Boolean register(String username, String email, String password, String code);
+    boolean register(String username, String email, String password, String code);
 
 }

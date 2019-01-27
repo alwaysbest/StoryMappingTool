@@ -24,7 +24,7 @@ public class StoryRepoTest {
 
     @Test
     @Transactional
-    public void testFindStoryById() {
-        assertNotNull(storyRepo.findStoryById(1));
+    public void test1() {
+        assertNotNull(storyRepo.findStoriesByProjectId(1));
     }
 }

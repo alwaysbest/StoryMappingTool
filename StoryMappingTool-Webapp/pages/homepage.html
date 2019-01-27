@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <link rel="stylesheet" href="../static/css/index.css"/>
+    <link rel="stylesheet" href="../static/css/amazeui.min.css" />
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <link rel="stylesheet" href="../static/css/app.css">
+    <link rel="stylesheet" href="../static/css/storyboard.css">
+    <style>
+         html,body{
+        height:100%;
+        position:relative;
+        }
+        .clearfix:before,
+        .clearfix:after {
+             display: table;
+             content: "";
+        }
+         .clearfix:after {
+             clear: both
+         }
+    </style>
+</head>
+<body>
+
+<div id="app" class="tpl-page-container tpl-page-header-fixed">
+    <header class="am-topbar am-topbar-inverse admin-header">
+        <div class="am-topbar-brand">
+            <a href="javascript:;" class="tpl-logo">
+                <img src="../static/img/logo.png" alt="">
+            </a>
+        </div>
+
+        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+
+                <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
+                        class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+
+                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                        <span class="tpl-header-list-user-nick">{{ username }}</span><span class="tpl-header-list-user-ico"> <img
+                            src="../static/img/user.png"></span>
+                    </a>
+                    <ul class="am-dropdown-content">
+                        <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
+                        <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
+                        <li><a href="login.html"><span class="am-icon-power-off"></span> 退出</a></li>
+                    </ul>
+                </li>
+                <li><a href="###" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
+            </ul>
+        </div>
+    </header>
+    <el-row>
+        <el-col :span="2">
+            <el-button type="default" @click="dialogFormVisible=true">新建故事</el-button>
+            <el-dialog title="新建故事" :visible.sync="dialogFormVisible">
+                <el-form :model="mapForm" status-icon :rules="validateForm" ref="mapForm" label-width="100px" label-position="left">
+                    <el-form-item label="名称"prop="title">
+                        <el-input type="text" v-model="mapForm.title" auto-complete="off" placeholder="请输入名称">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="描述"prop="description">
+                        <el-input type="textarea" :rows="2" v-model="mapForm.description" auto-complete="off"placeholder="请输入描述">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item >
+                        <el-button style="float: right;"type="success" @click="submitForm('mapForm')">确认</el-button>
+                        <el-button style="float: right; margin-right:10px"type="default" @click="dialogFormVisible=false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+        </el-col>
+            <el-col :span="22">
+                <el-col :span="6" v-for="(project, index) in projectList" :key="project.id">
+                    <el-card :body-style="{ padding: '0px' }" shadow="hover" >
+                        <div slot="header" class="clearfix">
+
+                            <span>{{ project.title }}</span>
+                            <el-button style="float: right; padding: 5px 0" type="text" @click="showMemberDialog(project.id)">添加成员</el-button>
+                            <el-button style="float: right; padding: 5px 0;margin-right:10px" type="text" @click="getDetail(project.id)">查看详情</el-button>
+                        </div>
+                        <div style="padding: 10px;">
+
+                            <span>{{ project.description }}</span>
+                        </div>
+                    </el-card>
+
+                </el-col>
+
+
+            </el-col>
+        <el-dialog title="邀请成员" :visible.sync="dialogMemberVisible">
+            <el-input autocomplete="off" placeholder="请输入成员邮箱" clearable v-model="memberEmail">
+                <el-button slot="append" icon="el-icon-check" @click="submitMember()"></el-button>
+
+            </el-input>
+
+        </el-dialog>
+
+    </el-row>
+
+
+</div>
+<script>
+new Vue({
+    el:"#app",
+    data:{
+        username:"",
+        uid:0,
+        projectList:[],
+        project:{
+            id:0,
+            creatorId:0,
+            title:"",
+            description:"",
+        },
+        dialogFormVisible: false,
+        dialogMemberVisible:false,
+        validateForm:{
+                 title:[
+                    { required: true, message: '请输入故事名称', trigger: 'blur' },
+                 ],
+                 description:[
+                   { required: true, message: '请输入故事描述',trigger: 'blur' },
+                 ],
+         },
+        mapForm:{
+            title:'',
+            description:'',
+        },
+        memberEmail:'',
+        projectId:0,
+    },
+    methods:{
+        showName:function(){
+            if (sessionStorage.getItem('username')===null){
+                window.location.href="login.html";
+            }else{
+
+                this.username=sessionStorage.getItem('username');
+                this.uid=sessionStorage.getItem('uid');
+            }
+
+        },
+        getProject(){
+            var uid=sessionStorage.getItem('uid');
+            axios.post(
+                'http://172.19.240.113/ui/list-project',
+                 {userId:uid},
+
+                {headers:{
+                            'Content-Type':'application/json'
+                            }
+                },
+            )
+            .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                             this.projectList=response.data.projectList;
+                         }else{
+                            this.$message.info('登录超时');
+                         }
+
+            })
+        },
+        getDetail(pId){
+            sessionStorage.setItem('pid',pId);
+            window.location.href="storyboard.html";
+        },
+        submitForm(formName){
+            this.$refs[formName].validate((valid)=>{
+                if(valid){
+                    var creatorId=sessionStorage.getItem('uid');
+                    var title=this.mapForm.title;
+                    var  description=this.mapForm.description;
+                    axios.post(
+                        'http://172.19.240.113/ui/project',
+                        {
+                            creatorId:creatorId,
+                            title:title,
+                            description:description
+                        },
+
+                        {headers:{
+                            'Content-Type':'application/json'
+                            }
+                        },
+
+                    )
+                    .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                            this.dialogFormVisible=false;
+                            this.getProject();
+                         }else{
+                            this.$message.info('新建故事失败');
+                         }
+
+                    })
+
+                }else{
+                    this.$message.error("请输入故事信息");
+                }
+            });
+        },
+        submitMember(){
+            if(this.memberEmail===''){
+                this.$message.error("请输入成员邮箱");
+            }else{
+                var email=this.memberEmail;
+                axios.post(
+                    'http://172.19.240.113/ui/project/'+this.projectId+'/invite-members',
+                    {email:email},
+                    {headers:{
+                            'Content-Type':'application/json'
+                            }
+                        },
+                )
+                .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            this.dialogMemberVisible=false;
+                            this.$message.success("添加成员成功");
+                         }else if (response.data.status==='NOT_EXIST'){
+                             this.$message.success("用户不存在");
+                         }else if (response.data.status==='ALREADY_EXIST'){
+                             this.$message.info("成员已在团队中");
+                             this.dialogMemberVisible=false;
+                         }
+
+
+                })
+
+            }
+        },
+        showMemberDialog(pid){
+            this.projectId=pid;
+            this.dialogMemberVisible=true;
+
+        },
+    },
+    created(){
+        this.showName();
+        this.getProject();
+    },
+});
+
+</script>
+
+</body>
+</html>

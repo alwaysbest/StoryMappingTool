@@ -23,4 +23,10 @@ public class StringUtilTest {
         System.out.println(str);
         assertEquals(4, str.length());
     }
+
+    @Test
+    public void test3() {
+        assertTrue(StringUtil.isNumeric("123"));
+        assertTrue(!StringUtil.isNumeric("-22"));
+    }
 }

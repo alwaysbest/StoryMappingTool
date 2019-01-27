@@ -2,12 +2,14 @@ package nju.software.service.impl;
 
 import nju.software.entity.User;
 import nju.software.repo.UserRepo;
+import nju.software.service.EmailService;
 import nju.software.service.UserManageService;
 import nju.software.util.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Time       : 2019/1/9 8:00 PM
@@ -18,12 +20,19 @@ import java.util.Date;
 public class UserManageServiceImpl implements UserManageService {
     @Resource
     private UserRepo repo;
+    @Resource
+    private EmailService emailService;
 
     @Override
-    public Boolean existUser(String email) {
+    public boolean existUser(String email) {
         User user = repo.findUserByEmail(email);
-        System.out.println(user);
         return user != null && user.getVerificationCode() == null;
+    }
+
+    @Override
+    public boolean existUser(int id) {
+        Optional<User> userDtoOptional = repo.findById(id);
+        return userDtoOptional.isPresent() && userDtoOptional.get().getVerificationCode() == null;
     }
 
     @Override
@@ -33,7 +42,7 @@ public class UserManageServiceImpl implements UserManageService {
     }
 
     @Override
-    public Boolean generateVerificationCode(String email) {
+    public boolean generateVerificationCode(String email) {
         User userDto = repo.findUserByEmail(email);
         User user = null;
         if (userDto != null) {
@@ -48,16 +57,19 @@ public class UserManageServiceImpl implements UserManageService {
         }
         user.setEmail(email);
         String code = StringUtil.generateRandomString(4);
-        // todo 发送邮件
+//        boolean flag = emailService.sendEmail(email, "Story Mapping Tool的验证码", code);
+//        if (!flag) {
+//            return false;
+//        }
         user.setVerificationCode(code);
         User result = repo.saveAndFlush(user);
         return result != null;
     }
 
     @Override
-    public Boolean register(String username, String email, String password, String code) {
+    public boolean register(String username, String email, String password, String code) {
         User userDto = repo.findUserByEmail(email);
-        if (userDto == null || !userDto.getVerificationCode().equals(code)) {//如果不存在或者验证码不一致
+        if (userDto == null || userDto.getVerificationCode() == null || !userDto.getVerificationCode().equals(code)) {//如果不存在或者验证码不一致
             return false;
         }
         userDto.setUsername(username);

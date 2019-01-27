@@ -1,5 +1,7 @@
 package nju.software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,8 +10,9 @@ import java.util.Date;
  * Author     : tangdaye
  * Description: 迭代周期实体类
  */
+@Data
 @Entity
-@Table(name = "release")
+@Table(name = "sprint")
 public class Release {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +20,9 @@ public class Release {
 
     @Column(name = "project_id")
     private int projectId;
+
+    @Column(name = "sequence_id")
+    private int sequenceId;
 
     @Column(name = "title")
     private String title;
@@ -30,74 +36,21 @@ public class Release {
     @Column(name = "end")
     private Date end;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
     public Release() {
     }
 
-    public Release(int projectId, String title, String description, Date start, Date end) {
+    public Release(int projectId, int sequenceId, String title, String description, Date start, Date end, Status status) {
         this.projectId = projectId;
+        this.sequenceId = sequenceId;
         this.title = title;
         this.description = description;
         this.start = start;
         this.end = end;
+        this.status = status;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public int getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    @Override
-    public String toString() {
-        return "Release{" +
-                "id=" + id +
-                ", projectId='" + projectId + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                '}';
-    }
 }

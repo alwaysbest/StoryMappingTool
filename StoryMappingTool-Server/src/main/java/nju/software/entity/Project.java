@@ -1,5 +1,7 @@
 package nju.software.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
@@ -7,6 +9,7 @@ import javax.persistence.*;
  * Author     : tangdaye
  * Description: 项目实体类
  */
+@Data
 @Entity
 @Table(name = "project")
 public class Project {
@@ -15,7 +18,7 @@ public class Project {
     private Integer id;
 
     @Column(name = "creator_id")
-    private String createId;
+    private int createId;
 
     @Column(name = "title")
     private String title;
@@ -26,7 +29,7 @@ public class Project {
     public Project() {
     }
 
-    public Project(String createId, String title, String description) {
+    public Project(int createId, String title, String description) {
         this.createId = createId;
         this.title = title;
         this.description = description;
@@ -40,11 +43,11 @@ public class Project {
         this.id = id;
     }
 
-    public String getCreateId() {
+    public int getCreateId() {
         return createId;
     }
 
-    public void setCreateId(String createId) {
+    public void setCreateId(int createId) {
         this.createId = createId;
     }
 

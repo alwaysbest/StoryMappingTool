@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register </title>
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <link rel="stylesheet" href="../static/css/index.css"/>
+    <link rel="stylesheet" href="../static/css/amazeui.min.css" />
+    <link rel="stylesheet" href="../static/css/admin.css">
+    <link rel="stylesheet" href="../static/css/app.css">
+    <link rel="stylesheet" href="../static/css/storyboard.css">
+    <style>
+     html,body{
+        height:100%;
+        position:relative;
+    }
+     .el-col {
+        border-radius: 4px;
+    }
+    .bg-purple {
+        background: #d3dce6;
+    }
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+    #app{
+
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        width:50%;
+        margin:auto;
+        text-align:center;
+        padding-top:100px;
+
+    }
+    .box-card{
+
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        width:60%;
+        margin: auto;
+    }
+
+    </style>
+</head>
+<body>
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        <a href="javascript:;" class="tpl-logo">
+            <img src="../static/img/logo.png" alt="">
+        </a>
+    </div>
+
+</header>
+<div id="app">
+    <h2>欢迎加入StoryBoard</h2>
+    <el-card class="box-card">
+        <el-form :model="form" status-icon :rules="validateForm" ref="form" label-width="25%" label-position="left">
+            <el-form-item label="用户名"prop="username">
+                <el-input type="text" v-model="form.username" auto-complete="off">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="密码"prop="password">
+                <el-input type="password" v-model="form.password" auto-complete="off">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="确认密码"prop="checkPass">
+                <el-input type="password" v-model="form.checkPass" auto-complete="off">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="邮箱"prop="emailAddress">
+                <el-col :span="8">
+                    <el-input type="text" v-model="form.emailName" auto-complete="off">
+                    </el-input>
+                </el-col>
+                <el-col :span="16">
+                    <el-input type="text" v-model="form.emailAddress" auto-complete="off">
+                        <template slot="prepend">@</template>
+                    </el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="邮箱验证"prop="validate">
+                <el-col :span="13">
+                    <el-input type="text" v-model="form.validate" auto-complete="off" placeholder="ABCD">
+                    </el-input>
+                </el-col>
+                <el-col :span="11">
+                    <el-button type="primary" @click="getValidate()">获取验证码</el-button>
+                </el-col>
+            </el-form-item>
+            <el-form-item >
+                <el-button type="success" @click="submitForm('form')">确认注册</el-button>
+                <el-button type="default" @click="login()">已有账户？登录</el-button>
+            </el-form-item>
+        </el-form>
+    </el-card>
+</div>
+<script>
+    var Main={
+        data(){
+            var validatePass=(rule,value,callback)=>{
+                if(value===''){
+                    callback(new Error('请输入确认密码'));
+                }else if(value!==this.form.password){
+                     callback(new Error('两次密码不一致'));
+                }else{
+                    callback();
+                }
+            };
+            return{
+                validateForm:{
+                 username: [
+                        { required: true, message: '请输入用户名', trigger: 'blur' },
+                 ],
+                 password:[
+                   { required: true, message: '请输入密码', trigger: 'blur' },
+                 ],
+                 checkPass:[
+                    { required: true,validator:validatePass, trigger: 'blur' },
+                 ],
+                 emailName:[
+                    { required: true, message: '请输入邮箱', trigger: 'blur' },
+                 ],
+                 emailAddress:[
+                    { required: true, message: '请输入邮箱', trigger: 'blur' },
+                 ],
+                 validate:[
+                    { required: true, message: '请输入验证码', trigger: 'blur' },
+                 ],
+
+                 },
+                 form:{
+                    username:'',
+                    password:'',
+                    checkPass:'',
+                    emailName:'',
+                    emailAddress:'',
+                    validate:'',
+
+                 },
+
+            };
+        },
+         methods:{
+          login(){
+            window.location.href='login.html';
+          },
+          getValidate(){
+            var email = this.form.emailName+"@"+this.form.emailAddress;
+            axios.post('http://172.19.240.113/ui/emailcode',{email:email},{
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            .then((response)=>{
+                if(response.data.status==='SUCCESS'){
+                    alert("验证码已发送");
+                }else{
+                    alert("该邮箱已被注册，请更换邮箱");
+                }
+
+            })
+          },
+          submitForm(formName){
+            this.$refs[formName].validate((valid)=>{
+                if(valid){
+                    var email = this.form.emailName+"@"+this.form.emailAddress;
+                    var code= this.form.validate;
+                    axios.post(
+                        'http://172.19.240.113/ui/register',
+                        {email:email,
+                        username:this.form.username,
+                        password:this.form.password,
+                        code:code},
+                        {headers:{
+                            'Content-Type':'application/json'
+                            }
+                        }
+                    )
+                     .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                             this.$message.success('注册成功');
+                             window.location.href='login.html';
+                         }else{
+                            alert("必须先获取验证码，注册验证码请输入ABCD");
+                         }
+
+                     })
+
+                }else{
+                    this.$message.error('请正确填写信息');
+                    return false;
+                }
+            });
+          },
+         },
+    }
+    var Ctor=Vue.extend(Main)
+    new Ctor().$mount('#app')
+
+
+</script>
+</body>
+</html>

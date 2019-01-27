@@ -5,7 +5,7 @@ package nju.software.entity;
  * Author     : tangdaye
  * Description: 故事状态
  */
-public enum StoryStatus {
+public enum Status {
     UNDO,
     DOING,
     DONE
