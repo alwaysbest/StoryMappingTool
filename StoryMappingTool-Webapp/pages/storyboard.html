@@ -25,7 +25,7 @@
 <body>
     <header class="am-topbar am-topbar-inverse admin-header">
         <div class="am-topbar-brand">
-            <a href="javascript:;" class="tpl-logo">
+            <a href="../pages/homepage.html" class="tpl-logo">
                 <img src="../static/img/logo.png" alt="">
             </a>
         </div>
@@ -39,16 +39,16 @@
 
                 <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
                     <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                        <span class="tpl-header-list-user-nick">阿令</span><span class="tpl-header-list-user-ico"> <img
+                        <span class="tpl-header-list-user-nick"></span><span class="tpl-header-list-user-ico"> <img
                                 src="../static/img/user.png"></span>
                     </a>
                     <ul class="am-dropdown-content">
                         <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
                         <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
-                        <li><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                        <li><a href="../pages/login.html"><span class="am-icon-power-off"></span> 退出</a></li>
                     </ul>
                 </li>
-                <li><a href="###" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
+                <li><a href="../pages/login.html" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
             </ul>
         </div>
     </header>
@@ -89,7 +89,8 @@
                 
 
             </li> -->
-            <backbone-modal v-if="showBackBoneModal" @close="showBackBoneModal = 0" :backbone_data_in_modal="current_backbone"
+            <backbone-modal v-if="showBackBoneModal" @close="showBackBoneModal = 0" 
+            :backbone_data_in_modal="current_backbone"
 :backbone_index="current_backbone_index" @clicksubmit='addOrUpdateBackbone' @clickdelete='deleteBackbone'>
 
 <span slot="header" v-if="showBackBoneModal == 2">编辑骨干故事</span>
@@ -111,34 +112,83 @@
 
 
         <!--  开发周期开始  -->
-        <release-component v-for="(release,index_release) in releaseList"
+        <div v-for="(release,index_release) in releaseList">
+        <release-component 
         @doubleclick='updaterelease' 
         @addclick='addrelease'
         @showrelease='showrelease'
         :release_card="release" 
         :index.sync="index_release"
         >
-
         </release-component>
               <!-- 每个迭代的开发周期内容开始-->
-        <ul class="activity-ul">
+        <ul class="activity-ul" v-if="showReleaseContent[index_release].show">
+              
 
-                <li class="task-backbone-li" v-for="backbone in backboneList">
-                        <task-component @click='addstory' :story_card="current_story" v-if="backbone.activityList.length==0">
-                                <span class="am-icon-plus task-extend-span" slot="task_component_content">
-                                </span>
-                            </task-component>
-                    <div class="task-li" v-for="activity in backbone.activityList">
+                <li class="task-backbone-li" v-for="(backbone,backbone_index) in backboneList">
+                    
+                        <task-add-component  
+                        @clickicon='addstory' 
+                        
+                        :story_card="current_story" 
+                        :backbone_index = "backbone_index"
+                        :activity_index = "0"
+                        :release_index = "index_release"
+                        :seq_id = 0
+                        v-if="backbone.activityList.length==0"
+                        >
+                              
+                            </task-add-component>
+
+
+                           
+
+
+                    <div class="task-li" v-for="(activity,activity_index) in backbone.activityList">
     
     
-                        <task-component @doubleclick='updatetask' v-for="story in activity.storyList" :story_card.sync="story">
-    
+
+
+
+                        <task-component 
+                        @doubleclick='updatetask'
+                        v-for="(story,story_index) in activity.storyList" 
+                        v-if="story.releaseId==release.id"
+                        :story_card="story"
+                        :backbone_index = "backbone_index"
+                        :activity_index = "activity_index"
+                        :release_index = "index_release"
+                        :seq_id = story_index
+                        >
                         </task-component>
-                        <task-component @click='addstory' :story_card="current_story">
-                            <span class="am-icon-plus task-extend-span" slot="task_component_content">
+                        <!-- <task-component  
+                        @clickIcon='addstory' 
+                        
+                        :story_card="current_story"
+                        :backbone_index = "backbone_index"
+                        :activity_index = "activity_index"
+                        :release_index = "index_release"
+                        :seq_id = activity.storyList.length
+                        >
+                            <span  @click='clickIcon' class="am-icon-plus task-extend-span" slot="task_component_content">
                             </span>
                         </task-component>
-    
+
+                        
+     -->
+
+     <task-add-component  
+     @clickicon='addstory' 
+     
+     :story_card="current_story" 
+     :backbone_index = "backbone_index"
+     :activity_index = "activity_index"
+     :release_index = "index_release"
+     :seq_id = activity.storyList.length
+     >
+           
+         </task-add-component>
+
                         <!-- <div class="backbone-extend">
                             <span class="am-icon-plus backbone-extend-span"  @click="showTaskModal = true"></span>
                           
@@ -146,6 +196,20 @@
                                 
                             </task-modal>
                         </div> -->
+                        <task-modal 
+                        v-if="showTaskModal"
+
+                        @close="showTaskModal = 0"
+                        
+                        :task_data_in_modal="current_story"
+                        @clicksubmit='addOrUpdateTask' @clickdelete='deleteTask'>
+
+                        
+                        
+                        >
+                                
+                        <span slot="header" v-if="showTaskModal == 2">编辑任务</span>
+                        </task-modal>
     
                     </div>
                     <!-- <div class="activity-li">
@@ -159,7 +223,7 @@
             </ul>
             <!-- 开发周期内容结束-->
 
-
+        </div>
 
 
         <develop-modal 
@@ -243,6 +307,13 @@
                     </div>
                 </slot>
                 </div>
+</script>
+
+<script type="text/x-template" id="task_add_component">
+    <div  style="width: 200px; margin-right:5px">
+            <span @click='clickIcon' class="am-icon-plus task-extend-span">
+                </span>
+           </div>
 </script>
 
 <script type="text/x-template" id="release_component">
@@ -404,7 +475,7 @@
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字" v-model="task_data_in_modal.title">
                                
                             </div>
                         </div>
@@ -413,20 +484,40 @@
                             <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
                             <div class="am-u-sm-9">
                                 <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
-                                <textarea class="" rows="2" id="user-intro" placeholder="请输入描述"></textarea>        
+                                <textarea class="" rows="2" id="user-intro" placeholder="请输入描述" v-model="task_data_in_modal.description"></textarea>        
                             </div>
                         </div>
+
+                        <div class="am-form-group">
+                                <label for="user-email" class="am-u-sm-3 am-form-label">时间 <span class="tpl-form-line-small-title">Time</span></label>
+                                <div class="am-u-sm-9">
+                                    <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="发布时间" data-am-datepicker="" readonly/>
+                                    <small>发布时间为必填</small> -->
+                                    <div class="block">
+                                        <el-date-picker
+    
+                                          v-model="date_value"
+                                          type="datetimerange"
+                                          align="right"
+                                          start-placeholder="开始日期"
+                                          end-placeholder="结束日期"
+                                          :default-time="['8:00:00', '18:00:00']">
+                                        </el-date-picker>
+                                      </div>
+                                </div>
+                            </div>
+
                         <div class="am-form-group">
                             <label class="am-u-sm-3 am-form-label">故事点 <span class="tpl-form-line-small-title">Storypoint</span></label>
                             <div class="am-u-sm-9">
-                                <input type="number" placeholder="输入预估故事点">
+                                <input type="number" placeholder="输入预估故事点" v-model="task_data_in_modal.points">
                             </div>
                         </div>
                         <div class="am-form-group">
                             <label for="user-phone" class="am-u-sm-3 am-form-label">状态 <span class="tpl-form-line-small-title">Status</span></label>
                             <div class="am-u-sm-9">
                             
-                                <el-select v-model="value6" placeholder="请选择" size="medium" clearable>
+                                <el-select v-model="task_data_in_modal.status" placeholder="请选择" size="medium" clearable>
                                     <el-option
                                     v-for="item in cities"
                                     :key="item.value"
@@ -615,7 +706,7 @@
 
     Vue.component('task-component', {
         template: '#task_component',
-        props: ['story_card'],
+        props: ['story_card','backbone_index','activity_index','release_index','seq_id'],
         data() {
             return {
 
@@ -623,11 +714,28 @@
         },
         methods: {
             doubleclick: function () {
-                this.$emit('doubleclick', this.task);
+                this.$emit('doubleclick', this.story_card);
             },
 
         }
     });
+    Vue.component('task-add-component', {
+        template: '#task_add_component',
+        props: ['story_card','backbone_index','activity_index','release_index','seq_id'],
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+            clickIcon:function(){
+                console.log(this.backbone_index,this.activity_index,this.release_index,this.seq_id)
+                 this.$emit('clickicon',this.backbone_index,this.activity_index,this.release_index,this.seq_id)
+            }
+
+        }
+    });
+
 
     Vue.component('release-component', {
         template: '#release_component',
@@ -644,7 +752,7 @@
                 this.$emit('addclick', this.release_card);
             },
             showrelease:function(){
-                this.$emit('showrelease', this.release_card);
+                this.$emit('showrelease', this.index);
             },
              //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
              dateFormat:function(time) {
@@ -703,21 +811,39 @@
 
     Vue.component('task-modal', {
         template: '#modal-task-template',
+        props: ['task_data_in_modal'],
         data() {
             return {
                 cities: [{
-                    value: 'Ready',
-                    label: '未开始'
+                    value: '1',
+                    label: 'UNDO'
                 }, {
-                    value: 'Doing',
-                    label: '正在进行'
+                    value: '2',
+                    label: 'DOING'
                 }, {
-                    value: 'Done',
-                    label: '已完成'
+                    value: '3',
+                    label: 'DONE'
                 }],
                 value6: '',
+                date_value:[],
             };
-        }
+        },
+        methods:{
+            clicksubmit: function () {
+                this.task_data_in_modal.start = this.date_value[0]
+                this.task_data_in_modal.end = this.date_value[1]
+                this.$emit('clicksubmit', this.task_data_in_modal);
+            },
+            clickdelete: function () {
+                this.$emit('clickdelete', this.task_data_in_modal);
+            },
+        },
+        created() {
+            //日期格式转换
+            this.date_value[0]=this.task_data_in_modal.start
+            this.date_value[1]=this.task_data_in_modal.end 
+        },
+
     });
 
     Vue.component('develop-modal', {
@@ -726,14 +852,14 @@
         data() {
             return {
                 cities: [{
-                    value: 'Ready',
-                    label: '未开始'
+                    value: '1',
+                    label: 'UNDO'
                 }, {
-                    value: 'Doing',
-                    label: '正在进行'
+                    value: '2',
+                    label: 'DOING'
                 }, {
-                    value: 'Done',
-                    label: '已完成'
+                    value: '3',
+                    label: 'DONE'
                 }],
                 date_value:[],
             }
@@ -760,7 +886,7 @@
     new Vue({
         el: '#app',
         data: {
-            basepath: "http://172.19.240.113/ui/project/1/",
+            basepath: "",
             userId: 0,
             userName: "sweets",
             story_count: 0,
@@ -775,30 +901,38 @@
             current_story: {},
             current_story_index: 0,
             current_release:{},
-
-            // tmpStoryCard: {
-            //     activityId:"",
-            //     description:"",
-            //     end:null,
-            //     epicId:"",
-            //     id:"",
-            //     points:1,
-            //     projectId:1,
-            //     releaseId:1,
-            //     sequenceId:1,
-            //     start:"2019-01-08T16:00:00.000+0000",
-            //     status:"DOING",
-            //     title:"story_1_1_1_1_title",
-            // },
             showBackBoneModal: 0,    // 0 -关闭 1-新增 2-修改
             showActivityModal: 0,
             showTaskModal: 0,
             showDevelopModal: 0,
+            showReleaseContent:[
+                {
+          show: true
+        },
+        {
+            show: true
+        },
+        {
+            show: true
+        },
+        {
+            show: true
+        },
+        {
+            show: true
+        }
+        ],
         },
         methods: {
             indexs: function () {
                 ///获取project ID 和 userId 和 userName
-
+                if (sessionStorage.getItem('username')===null){
+                    window.location.href="login.html";
+                }else{
+                    this.userName=sessionStorage.getItem('username');
+                    this.userId=sessionStorage.getItem('uid');
+                    this.basepath="http://172.19.240.113/ui/project/"+sessionStorage.getItem('pid')+"/";
+            }
             },
             addbackbone: function (seq) {
                 this.current_backbone = {}
@@ -812,23 +946,33 @@
                 this.current_activity.creatorId = this.userId
                 this.current_activity.epicId = this.backboneList[backbone_index].id
                 if (seq == -1){//此时是向下新增
-                    last_index = this.backboneList[backbone_index-1].activityList.length-1
-                    this.current_activity.sequenceId = this.backboneList[backbone_index-1].activityList[last_index].sequenceId
+                    if(this.backboneList[backbone_index].activityList.length==0){
+                        this.current_activity.sequenceId = 0
+                    }else{
+                        last_index = this.backboneList[backbone_index].activityList.length-1
+                        this.current_activity.sequenceId = this.backboneList[backbone_index].activityList[last_index].sequenceId+1  
+                    }
                 }else{
                     this.current_activity.sequenceId = seq
                 }
                 this.showActivityModal = 1
             },
-            addstory: function (seq,backbone_index) {
-                this.current_activity = {}
-                this.current_activity.sequenceId = seq
-                this.current_activity.creatorId = this.userId
-                this.current_activity.epicId = this.backboneList[backbone_index].id
-                this.showActivityModal = 1
+            addstory: function (backbone_index,activity_index,release_index,seq_id) {
+                console.log(backbone_index,activity_index,release_index,seq_id)
+                this.current_story = {}
+                this.current_story.creatorId = this.userId
+                this.current_story.epicId = this.backboneList[backbone_index].id
+                this.current_story.activityId= this.backboneList[backbone_index].activityList[activity_index].id
+                this.current_story.releaseId =this.releaseList[release_index].id
+                this.current_story.sequenceId = seq_id
+                this.showTaskModal = 1
             },
             addrelease:function(){
                 this.current_release = {}
                 this.showDevelopModal = 1
+            },
+            deleteTask:function(){
+
             },
 
             updatebackbone: function (backbone_card, index) {
@@ -844,16 +988,18 @@
                 this.current_activity_index = activity_index
                 this.showActivityModal = 2
             },
-            updatetask: function (id, name, description) {
-                console.log("任务的id，name，desc是 " + id, name, description)
+            updatetask: function (task_card) {
+                this.current_story = task_card
                 this.showTaskModal = 2
             },
             updaterelease:function(release_card){
                 this.current_release = release_card
                 this.showDevelopModal = 2
             },
-            showrelease:function(){
-                
+            showrelease:function(index){
+                console.log(this.showReleaseContent[index])
+                this.showReleaseContent[index].show = !this.showReleaseContent[index].show
+                console.log(this.showReleaseContent[index])
             },
             getAllData: function () {
                 _this = this
@@ -886,12 +1032,22 @@
             },
             initProject:function(){
                 this.current_backbone = {
-                    creatorId: 0,
+                    creatorId: this.userId,
                     description: "编辑你的第一张卡片",
                     sequenceId: 1,
                     title: "现在开始吧！"
                 }
+                this.current_release = {
+                    creatorId: this.userId,
+                    sequenceId: 1,
+                    title: "MVP迭代",
+                    description: "编辑你的第一个迭代吧！",
+                    end: "2019-01-25T16:00:00.000+0000",
+                    start: "2019-01-21T16:00:00.000+0000",
+                    status: "UNDO"
+                }
                 this.addOrUpdateBackbone(this.current_backbone,0)
+                this.addOrUpdateRelease(this.current_release)
             },
             addOrUpdateBackbone: function (current_backbone, index) {
                 _this = this;
@@ -941,9 +1097,23 @@
                     });
             },
             addOrUpdateTask: function (current_task) {
+                console.log(current_task)
+                current_task.start=this.dateFormatToPost(current_task.start)
+                current_task.end=this.dateFormatToPost(current_task.end)
+
+                if(current_task.status=="UNDO"){
+                    current_task.status=0
+                }
+                else if(current_task.status=="DOING"){
+                    current_task.status=1
+                }
+                else{
+                    current_task.status=2
+                }
+                console.log(current_task)
                 axios({
                     method: 'post',
-                    url: this.basepath + "task",
+                    url: this.basepath + "story",
                     data:current_task,
                     headers: {
                         'Content-Type': 'application/json',
@@ -954,6 +1124,7 @@
                         console.log(res.data);
                         if (res.data.status == "SUCCESS") {
                             _this.backboneList= res.data.epicList
+                            _this.releaseList = res.data.releaseList
                             _this.showTaskModal = 0
                             _this.current_task = {}
                         } else {
@@ -965,6 +1136,20 @@
             },
             addOrUpdateRelease: function (current_release) {
                 console.log(current_release)
+                current_release.start=this.dateFormatToPost(current_release.start)
+                current_release.end=this.dateFormatToPost(current_release.end)
+
+                if(current_release.status=="UNDO"){
+                    current_release.status=0
+                }
+                else if(current_release.status=="DOING"){
+                    current_release.status=1
+                }
+                else{
+                    current_release.status=2
+                }
+                console.log(current_release)
+
                 axios({
                     method: 'post',
                     url: this.basepath + "release",
@@ -1010,6 +1195,21 @@
                 var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
                 // 拼接
                 return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            },
+             //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+             dateFormatToPost:function(time) {
+                var date=new Date(time);
+                var year=date.getFullYear();
+                /* 在日期格式中，月份是从0开始的，因此要加0
+                * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+                * */
+                var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+                var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+                var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+                var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+                var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+                // 拼接
+                return year+month+day;
             },
            
         },
