@@ -10,16 +10,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-  
-    
+
+
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    
     <link rel="stylesheet" href="../static/css/amazeui.min.css" />
     <link rel="stylesheet" href="../static/css/admin.css">
     <link rel="stylesheet" href="../static/css/app.css">
     <link rel="stylesheet" href="../static/css/storyboard.css">
-    
     <script src="../static/js/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -33,7 +33,7 @@
         <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
 
             <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
-              
+
                 <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
                             class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
 
@@ -55,129 +55,155 @@
 
     <div id="app" class="tpl-page-container tpl-page-header-fixed">
         <!--上面的周期-->
-        <!-- v-for="backbone in backboneList" -->
-        <ul class="activity-ul" >
-            <li class="backbone-li" v-for="backbone in backboneList">
-                <back-bone-component @doubleclick='updatebackbone' :backbone_card.sync="backbone"></back-bone-component>
-                <div class="activity-li" >
-                    <activity-component v-for="activity in backbone.activityList" @doubleclick='updateactivity'></activity-component>  
+        <ul class="activity-ul">
+            <li class="backbone-li" v-for="(backbone,index_backbone) in backboneList">
+                <back-bone-component @doubleclick='updatebackbone' :backbone_card="backbone" :index.sync="index_backbone"
+                    @insertleft="addbackbone" @insertbottom="addactivity" @insertright="addbackbone">
+                </back-bone-component>
+                <div class="activity-li">
+                    <activity-component v-for="(activity,index_activity) in backbone.activityList" @doubleclick='updateactivity'
+                        :activity_card="activity"
+                        :backbone_index.sync="index_backbone"
+                        :activity_index.sync="index_activity"
+                        @insertleft="addactivity" @insertbottom="addstory" @insertright="addactivity"
+                        
+                        ></activity-component>
+
+                    <!-- <div class="activity-li">
+                            <span class="am-icon-plus activity-extend-span"  @click="showActivityModal = 1"></span>
+                            <activity-modal v-if="showActivityModal" @close="showActivityModal = 0">
+                                    <span slot="header" v-if="showActivityModal == 2">编辑活动</span>
+                            </activity-modal>
+                            
+                    </div> -->          
+                </div>
+            </li>
+            <!-- <li class="backbone-extend">
+                <span class="am-icon-plus backbone-extend-span"  @click="showBackBoneModal = 1"></span>
+                  
+                   <backbone-modal v-if="showBackBoneModal" @close="showBackBoneModal = 0" :backbone_data_in_modal.sync="backboneObject">
+                    
+                        <span slot="header" v-if="showBackBoneModal == 2">编辑骨干故事</span>
+                </backbone-modal>
+
                 
+
+            </li> -->
+            <backbone-modal v-if="showBackBoneModal" @close="showBackBoneModal = 0" :backbone_data_in_modal="current_backbone"
+:backbone_index="current_backbone_index" @clicksubmit='addOrUpdateBackbone' @clickdelete='deleteBackbone'>
+
+<span slot="header" v-if="showBackBoneModal == 2">编辑骨干故事</span>
+</backbone-modal>
+
+<activity-modal v-if="showActivityModal" @close="showActivityModal = 0" :activity_data_in_modal="current_activity"
+:backbone_index="current_backbone_index" :activity_index="current_activity_index" @clicksubmit='addOrUpdateActivity' @clickdelete='deleteActivity'>
+
+<span slot="header" v-if="showActivityModal == 2">编辑活动</span>
+</activity-modal>
+
+
+          
+        </ul>
+        <!--上面的周期结束-->
+
+
+
+
+
+        <!--  开发周期开始  -->
+        <release-component v-for="(release,index_release) in releaseList"
+        @doubleclick='updaterelease' 
+        @addclick='addrelease'
+        @showrelease='showrelease'
+        :release_card="release" 
+        :index.sync="index_release"
+        >
+
+        </release-component>
+              <!-- 每个迭代的开发周期内容开始-->
+        <ul class="activity-ul">
+
+                <li class="task-backbone-li" v-for="backbone in backboneList">
+                        <task-component @click='addstory' :story_card="current_story" v-if="backbone.activityList.length==0">
+                                <span class="am-icon-plus task-extend-span" slot="task_component_content">
+                                </span>
+                            </task-component>
+                    <div class="task-li" v-for="activity in backbone.activityList">
+    
+    
+                        <task-component @doubleclick='updatetask' v-for="story in activity.storyList" :story_card.sync="story">
+    
+                        </task-component>
+                        <task-component @click='addstory' :story_card="current_story">
+                            <span class="am-icon-plus task-extend-span" slot="task_component_content">
+                            </span>
+                        </task-component>
+    
+                        <!-- <div class="backbone-extend">
+                            <span class="am-icon-plus backbone-extend-span"  @click="showTaskModal = true"></span>
+                          
+                            <task-modal v-if="showTaskModal" @close="showTaskModal = false">
+                                
+                            </task-modal>
+                        </div> -->
+    
+                    </div>
                     <!-- <div class="activity-li">
                             <span class="am-icon-plus activity-extend-span"  @click="showActivityModal = 1"></span>
                             <activity-modal v-if="showActivityModal" @close="showActivityModal = 0">
                                     <span slot="header" v-if="showActivityModal == 2">编辑活动</span>
                             </activity-modal>
                     </div> -->
-                </div>
-             
-            </li>
-            <li class="backbone-extend">
-                <span class="am-icon-plus backbone-extend-span"  @click="showBackBoneModal = 1"></span>
-                   <!-- use the modal component, pass in the prop -->
-                   <backbone-modal v-if="showBackBoneModal" @close="showBackBoneModal = 0" :backbone_data_in_modal.sync="backboneObject">
-                    
-                        <span slot="header" v-if="showBackBoneModal == 2">编辑骨干故事</span>
-                </backbone-modal>
-
-            </li>
-        </ul>
-        <!--上面的周期结束-->
-
-        <!--  开发周期开始  -->
-
-
-        <div class="tpl-block">
-            <div class="am-g">
-                <div class="am-u-sm-12 am-u-md-2">
-                    <div class="am-btn-toolbar">
-                        <div class="am-btn-group am-btn-group-xs">
-                            <span class="am-icon-plus"></span>
-                            MVP迭代一
-                        </div>
-                    </div>
-                </div>
-                <div class="am-u-sm-12 am-u-md-2" @click="showDevelopModal = 2">
-                    <span class="am-icon-calendar">&nbsp;开始</span> 2019-01-16
-
-                </div>
-                <div class="am-u-sm-12 am-u-md-2" @click="showDevelopModal = 2">
-                        <span class="am-icon-calendar">&nbsp;结束</span> 2019-01-16
+                </li>
     
-                    </div>
-                <div class="am-u-sm-12 am-u-md-4" @click="showDevelopModal = 2">
-                    13 cards of 24 hours
-                </div>
-                <div class="am-u-sm-12 am-u-md-2" style="color: #F44336;" @click="showDevelopModal = 1">
-                        <span class="am-icon-bullhorn">&nbsp;添加新迭代</span> 
-                       
-                </div>
-                <develop-modal v-if="showDevelopModal" @close="showDevelopModal = 0">
-                        <span slot="header" v-if="showDevelopModal == 2">编辑发行周期</span>
-                </develop-modal>
+            </ul>
+            <!-- 开发周期内容结束-->
 
-            </div>
-        </div>
+
+
+
+        <develop-modal 
+        v-if="showDevelopModal" @close="showDevelopModal = 0"
+        :release_data_in_modal="current_release"
+        @clicksubmit='addOrUpdateRelease' 
+        @clickdelete='deleteRelease'>
+             <span slot="header" v-if="showDevelopModal == 2">编辑发行周期</span>
+        </develop-modal>
         <!--开发周期结束 -->
 
 
-        <!-- 开发周期内容开始-->
-        <ul class="activity-ul">
-            
-            <li class="task-backbone-li" v-for="backbone in backboneList">
-                <div class="task-li" v-for="activity in backbone.activityList">
-                    <task-component @doubleclick='updatetask' v-if="activity.taskList.length==0">
-                            <div slot="task_component_content" style="width: 200px;height:200px; margin-right:5px">
-                                    
-                            </div>
-                    </task-component>
-                   
-                    <task-component @doubleclick='updatetask' v-for="task in activity.taskList" >
-
-                    </task-component>
-                   
-                    <!-- <div class="backbone-extend">
-                        <span class="am-icon-plus backbone-extend-span"  @click="showTaskModal = true"></span>
-                      
-                        <task-modal v-if="showTaskModal" @close="showTaskModal = false">
-                            
-                        </task-modal>
-                    </div> -->
-
-                </div>
-                <!-- <div class="activity-li">
-                        <span class="am-icon-plus activity-extend-span"  @click="showActivityModal = 1"></span>
-                        <activity-modal v-if="showActivityModal" @close="showActivityModal = 0">
-                                <span slot="header" v-if="showActivityModal == 2">编辑活动</span>
-                        </activity-modal>
-                </div> -->
-           
-            </li>
-           
-        </ul>
-        <!-- 开发周期内容结束-->
+      
     </div>
 </body>
 
 
+
+
 </html>
 
+
+<!-------------------------------------js代码---------------------------------------------->
+
+
+
 <script type="text/x-template" id="back_bone_component">
-        <div style="width: 200px">
+        <div style="width: 200px;margin-right:5px">
                     <div class="dashboard-stat blue" @dblclick='doubleclick'>
                         <!-- <div class="visual">
                              <i class="am-icon-comments-o"></i> 
                         </div> -->
                         <div class="details">
-                            <div class="number">{{backbone_card.name}}</div>
+                            <div class="number">{{backbone_card.title}}</div>
                             <div class="desc">{{backbone_card.description}}</div>
                         </div>
-                        <a class="more" href="#"> 查看更多
-                            <i class="m-icon-swapright">3</i>
+                        <a class="more" href="#"> &nbsp;
+                            <i class="am-icon-angle-left icon-add-left" @click='insertleft'></i>
+                            <i class="am-icon-angle-right  tpl-left-nav-more-ico-rotate icon-add-center" @click='insertbottom'></i>
+                            <i class="am-icon-angle-right  icon-add-right" @click='insertright'></i>
                         </a>
                     </div>
                 </div> 
 </script>
-
 
 <script type="text/x-template" id="activity_component">
          <div style="width: 200px; margin-right:5px">
@@ -186,12 +212,17 @@
                             <i class="am-icon-bar-chart-o"></i>
                         </div> -->
                         <div class="details">
-                            <div class="number"> 测试活动1 </div>
-                            <div class="desc"> 这是一个详细描述 </div>
+                            <div class="number"> {{activity_card.title}} </div>
+                            <div class="desc"> {{activity_card.description}} </div>
                         </div>
-                        <a class="more" href="#"> 1
+                        <!-- <a class="more" href="#"> 1
                     <i class="m-icon-swapright">+</i>
-                </a>
+                </a> -->
+                <a class="more" href="#"> &nbsp;
+                        <i class="am-icon-angle-left icon-add-left" @click='insertleft'></i>
+                        <i class="am-icon-angle-right  tpl-left-nav-more-ico-rotate icon-add-center" @click='insertbottom'></i>
+                        <i class="am-icon-angle-right  icon-add-right" @click='insertright'></i>
+                    </a>
                     </div>
                 </div>
 </script>
@@ -203,16 +234,53 @@
                             <i class="am-icon-apple"></i>
                         </div> -->
                         <div class="details">
-                            <div class="number"> 测试任务1 </div>
-                            <div class="desc"> 这是描述噢噢噢噢 </div>
+                            <div class="number"> {{story_card.title}} </div>
+                            <div class="desc"> {{story_card.description}} </div>
                         </div>
-                        <a class="more" href="#"> 向下拓展
-                    <i class="m-icon-swapright ">2</i>
+                        <a class="more" href="#"> {{story_card.status}}
+                    <i class="m-icon-swapright" style="float:right">{{story_card.points}}</i>
                         </a>
                     </div>
                 </slot>
                 </div>
 </script>
+
+<script type="text/x-template" id="release_component">
+    <div class="tpl-block">
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-2">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <span class="am-icon-plus" @click='showrelease'></span>
+                           {{release_card.title}}
+                        </div>
+                    </div>
+                </div>
+                <div class="am-u-sm-12 am-u-md-3" @dblclick='doubleclick'>
+                    <span class="am-icon-calendar">&nbsp;开始</span>   {{dateFormat(release_card.start)}}
+
+                </div>
+                <div class="am-u-sm-12 am-u-md-3" @dblclick='doubleclick' >
+                    <span class="am-icon-calendar">&nbsp;结束</span>   {{dateFormat(release_card.end)}}
+
+                </div>
+                <div class="am-u-sm-12 am-u-md-1" @dblclick='doubleclick' >
+                    {{release_card.status}} 
+                </div>
+                <div class="am-u-sm-12 am-u-md-2" style="color: #F44336;" @click='addclick'>
+                    <span class="am-icon-bullhorn">&nbsp;添加新迭代</span>
+
+                </div>
+               
+
+            </div>
+        </div>
+
+   
+</script>
+
+
+
 
 
 <!-- template for the modal component -->
@@ -236,7 +304,7 @@
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字" v-model="backbone_data_in_modal.name">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字" v-model="backbone_data_in_modal.title">
                                
                             </div>
                         </div>
@@ -244,13 +312,14 @@
                         <div class="am-form-group">
                             <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
                             <div class="am-u-sm-9">
-                                <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
-                                <textarea class="" rows="3" id="user-intro" placeholder="请输入描述"></textarea>        
+                                <textarea class="" rows="3" id="user-intro" placeholder="请输入描述" v-model="backbone_data_in_modal.description">{{backbone_data_in_modal.description}}</textarea>        
                             </div>
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success " @click='clicksubmit'>提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-danger " @click='clickdelete'>删除此卡片</button>
+        
                             </div>
                         </div>
                     </form>
@@ -259,20 +328,12 @@
               </slot>
             </div>
   
-            <!-- <div class="modal-footer">
-              <slot name="footer">
-                default footer
-                <button class="modal-default-button" @click="$emit('close')">
-                  OK
-                </button>
-              </slot>
-            </div> -->
           </div>
         </div>
       </div>
     </transition>
 </script>
-  
+
 <script type="text/x-template" id="modal-activity-template">
     <transition name="modal">
       <div class="modal-mask">
@@ -293,7 +354,7 @@
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字" v-model="activity_data_in_modal.title">
                                
                             </div>
                         </div>
@@ -302,12 +363,14 @@
                             <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
                             <div class="am-u-sm-9">
                                 <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
-                                <textarea class="" rows="3" id="user-intro" placeholder="请输入描述"></textarea>        
+                                <textarea class="" rows="3" id="user-intro" placeholder="请输入描述" v-model="activity_data_in_modal.description">{{activity_data_in_modal.description}}</textarea>        
                             </div>
                         </div>
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success " @click='clicksubmit'>提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-danger " @click='clickdelete'>删除此卡片</button>
+        
                             </div>
                         </div>
                     </form>
@@ -315,15 +378,6 @@
                 </div>
               </slot>
             </div>
-  
-            <!-- <div class="modal-footer">
-              <slot name="footer">
-                default footer
-                <button class="modal-default-button" @click="$emit('close')">
-                  OK
-                </button>
-              </slot>
-            </div> -->
           </div>
         </div>
       </div>
@@ -387,7 +441,9 @@
 
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success " @click='clicksubmit'>提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-danger " @click='clickdelete'>删除此卡片</button>
+        
                             </div>
                         </div>
                     </form>
@@ -430,7 +486,7 @@
                         <div class="am-form-group">
                             <label for="user-name" class="am-u-sm-3 am-form-label">名称 <span class="tpl-form-line-small-title">Title</span></label>
                             <div class="am-u-sm-9">
-                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字">
+                                <input type="text" class="tpl-form-input" id="user-name" placeholder="请输入标题文字" v-model="release_data_in_modal.title">
                                
                             </div>
                         </div>
@@ -439,7 +495,7 @@
                             <label for="user-email" class="am-u-sm-3 am-form-label">描述 <span class="tpl-form-line-small-title">Description</span></label>
                             <div class="am-u-sm-9">
                                 <!-- <input type="text" class="am-form-field tpl-form-no-bg" placeholder="请输入描述" data-am-datepicker="" readonly/> -->
-                                <textarea class="" rows="2" id="user-intro" placeholder="请输入描述"></textarea>        
+                                <textarea class="" rows="2" id="user-intro" placeholder="请输入描述" v-model="release_data_in_modal.description"></textarea>        
                             </div>
                         </div>
                         
@@ -451,7 +507,7 @@
                                 <div class="block">
                                     <el-date-picker
 
-                                      v-model="value7"
+                                      v-model="date_value"
                                       type="datetimerange"
                                       align="right"
                                       start-placeholder="开始日期"
@@ -461,10 +517,28 @@
                                   </div>
                             </div>
                         </div>
+                        <div class="am-form-group">
+                                <label for="user-phone" class="am-u-sm-3 am-form-label">状态 <span class="tpl-form-line-small-title">Status</span></label>
+                                <div class="am-u-sm-9">
+                                
+                                    <el-select v-model="release_data_in_modal.status" placeholder="请选择" size="medium" clearable>
+                                        <el-option
+                                        v-for="item in cities"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        <span style="float: left">{{ item.label }}</span>
+                                        <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
+                                        </el-option>
+                                    </el-select>
+                                </div>
+                            </div>
 
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
-                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success " @click='clicksubmit'>提交</button>
+                                <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-danger " @click='clickdelete'>删除此周期</button>
+        
                             </div>
                         </div>
                     </form>
@@ -487,101 +561,198 @@
     </transition>
 </script>
 
+
 <script>
 
     //注册组件
     Vue.component('back-bone-component', {
         template: '#back_bone_component',
-        props:['backbone_card'],
+        props: ['backbone_card', 'index'],
         data() {
-            return{
-                id:"",
-                name:"七个字骨干故事",
-                description:"我是详细描述",
-                creator:"",
+            return {
             }
         },
-        methods:{
-            doubleclick:function(){
-                this.$emit('doubleclick',this.id,this.name,this.description);
+        methods: {
+            doubleclick: function () {
+                this.$emit('doubleclick', this.backbone_card, this.index);
             },
-            
+            insertleft: function () {
+                this.$emit('insertleft', this.backbone_card.sequenceId);
+            },
+            insertbottom: function () {
+                this.$emit('insertbottom',-1,this.index);
+            },
+            insertright: function () {
+                this.$emit('insertright', this.backbone_card.sequenceId + 1);
+            }
         }
     });
 
     Vue.component('activity-component', {
         template: '#activity_component',
-        props:['activity_card'],
+        props: ['activity_card', 'backbone_index', 'activity_index'],
         data() {
             return {
-             
+
             }
         },
-        methods:{
-            doubleclick:function(){
-                this.$emit('doubleclick',this.id,this.name,this.description);
+        methods: {
+            doubleclick: function () {
+                this.$emit('doubleclick', this.activity_card, this.backbone_index, this.activity_card);
             },
-            
+            insertleft: function () {
+                this.$emit('insertleft', this.activity_card.sequenceId,this.backbone_index);
+            },
+            insertbottom: function () {
+                this.$emit('insertbottom', this.backbone_index, this.activity_index);
+            },
+            insertright: function () {
+                this.$emit('insertright', this.activity_card.sequenceId + 1,this.backbone_index);
+            }
+
         }
     });
 
     Vue.component('task-component', {
         template: '#task_component',
-        props:['task_card'],
+        props: ['story_card'],
         data() {
             return {
-             
+
             }
         },
-        methods:{
-            doubleclick:function(){
-                this.$emit('doubleclick',this.task);
+        methods: {
+            doubleclick: function () {
+                this.$emit('doubleclick', this.task);
             },
-            
+
         }
     });
-   
-    Vue.component('backbone-modal', {
-        template: '#modal-backbone-template',
-        props: ['backbone_data_in_modal'],
+
+    Vue.component('release-component', {
+        template: '#release_component',
+        props: ['release_card', 'index'],
         data() {
             return {
-             
+            }
+        },
+        methods: {
+            doubleclick: function () {
+                this.$emit('doubleclick', this.release_card);
+            },
+            addclick:function(){
+                this.$emit('addclick', this.release_card);
+            },
+            showrelease:function(){
+                this.$emit('showrelease', this.release_card);
+            },
+             //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+             dateFormat:function(time) {
+                var date=new Date(time);
+                var year=date.getFullYear();
+                /* 在日期格式中，月份是从0开始的，因此要加0
+                * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+                * */
+                var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+                var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+                var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+                var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+                var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+                // 拼接
+                return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            },
+        }
+    });
+
+    Vue.component('backbone-modal', {
+        template: '#modal-backbone-template',
+        props: ['backbone_data_in_modal', 'backbone_index'],
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+            clicksubmit: function () {
+                this.$emit('clicksubmit', this.backbone_data_in_modal, this.backbone_index);
+            },
+            clickdelete: function () {
+                this.$emit('clickdelete', this.backbone_data_in_modal, this.backbone_index);
             }
         },
 
     });
-   
+
     Vue.component('activity-modal', {
-        template: '#modal-activity-template'
+        template: '#modal-activity-template',
+        props: ['activity_data_in_modal', 'backbone_index', 'activity_index'],
+        data() {
+            return {
+
+            }
+        },
+        methods: {
+            clicksubmit: function () {
+                this.$emit('clicksubmit', this.activity_data_in_modal, this.backbone_index, this.activity_index);
+            },
+            clickdelete: function () {
+                this.$emit('clickdelete', this.activity_data_in_modal, this.backbone_index, this.activity_index);
+            }
+        },
     });
-   
+
     Vue.component('task-modal', {
         template: '#modal-task-template',
         data() {
             return {
                 cities: [{
-          value: 'Ready',
-          label: '未开始'
-        }, {
-          value: 'Doing',
-          label: '正在进行'
-        }, {
-          value: 'Done',
-          label: '已完成'
-        }],
-           value6: '',
-      };
-    }
+                    value: 'Ready',
+                    label: '未开始'
+                }, {
+                    value: 'Doing',
+                    label: '正在进行'
+                }, {
+                    value: 'Done',
+                    label: '已完成'
+                }],
+                value6: '',
+            };
+        }
     });
-   
+
     Vue.component('develop-modal', {
         template: '#modal-develop-template',
+        props: ['release_data_in_modal'],
         data() {
             return {
-                value7: '',
-      };
-    }
+                cities: [{
+                    value: 'Ready',
+                    label: '未开始'
+                }, {
+                    value: 'Doing',
+                    label: '正在进行'
+                }, {
+                    value: 'Done',
+                    label: '已完成'
+                }],
+                date_value:[],
+            }
+        },
+        methods: {
+            clicksubmit: function () {
+                this.release_data_in_modal.start = this.date_value[0]
+                this.release_data_in_modal.end = this.date_value[1]
+                this.$emit('clicksubmit', this.release_data_in_modal);
+            },
+            clickdelete: function () {
+                this.$emit('clickdelete', this.release_data_in_modal);
+            },
+        },
+        created() {
+            //日期格式转换
+            this.date_value[0]=this.release_data_in_modal.start
+            this.date_value[1]=this.release_data_in_modal.end 
+        },
     });
 
 
@@ -589,93 +760,263 @@
     new Vue({
         el: '#app',
         data: {
-            basepath:"http://172.19.240.113/ui/",
+            basepath: "http://172.19.240.113/ui/project/1/",
             userId: 0,
             userName: "sweets",
             story_count: 0,
             backboneList: [],
-            backboneObject: {
-                "name": "骨干故事",
-                "creator": this.userId,
-                "description": "详细详细描述",
-                "sequence_id": 0,
-                "id": null,
-                "activityList":[],
+            releaseList: [],
+            memberList: [],
+            current_backbone: {
+            },
+            current_backbone_index: 0,
+            current_activity: {},
+            current_activity_index: 0,
+            current_story: {},
+            current_story_index: 0,
+            current_release:{},
 
-            },
-            activityObject: {
-                "name": "我是活动",
-                "creator": "0",
-                "comment": "我是很长很长的描述",
-                "backbone_id": "0",
-                "sequence_id": "1",
-                "id": null,
-                taskList:[]
-            },
-            newactivityObject: {
-                "name": "我是活动",
-                "creator": "0",
-                "comment": "我是很长很长的描述",
-                "backbone_id": "0",
-                "sequence_id": "1",
-                "id": null,
-                taskList:[]
-            },
-            taskObject: {
-                "name": "''",
-                "creator": "''",
-                "comment": "''",
-                "activity_id": "",
-                "sequence_id": 1,
-                "story_point": 0,
-                "status": "undo",
-                "phrase_id": "0",
-                "story_id": ""
-            },
-
+            // tmpStoryCard: {
+            //     activityId:"",
+            //     description:"",
+            //     end:null,
+            //     epicId:"",
+            //     id:"",
+            //     points:1,
+            //     projectId:1,
+            //     releaseId:1,
+            //     sequenceId:1,
+            //     start:"2019-01-08T16:00:00.000+0000",
+            //     status:"DOING",
+            //     title:"story_1_1_1_1_title",
+            // },
             showBackBoneModal: 0,    // 0 -关闭 1-新增 2-修改
             showActivityModal: 0,
             showTaskModal: 0,
-            showDevelopModal:0,
-
+            showDevelopModal: 0,
         },
         methods: {
             indexs: function () {
-                this.backboneObject.activityList.push(this.activityObject);
+                ///获取project ID 和 userId 和 userName
 
-                this.activityObject.taskList.push(this.taskObject);
-                this.backboneObject.activityList.push(this.newactivityObject);
+            },
+            addbackbone: function (seq) {
+                this.current_backbone = {}
+                this.current_backbone.sequenceId = seq
+                this.current_backbone.creatorId = this.userId
+                this.showBackBoneModal = 1
+            },
+            addactivity: function (seq,backbone_index) {
                 
-                this.backboneObject.activityList.push(this.activityObject);
-                this.backboneList.push(this.backboneObject);
-                this.backboneList.push(this.backboneObject);
-                this.backboneList.push(this.backboneObject);
-                this.backboneList.push(this.backboneObject);
+                this.current_activity = {}
+                this.current_activity.creatorId = this.userId
+                this.current_activity.epicId = this.backboneList[backbone_index].id
+                if (seq == -1){//此时是向下新增
+                    last_index = this.backboneList[backbone_index-1].activityList.length-1
+                    this.current_activity.sequenceId = this.backboneList[backbone_index-1].activityList[last_index].sequenceId
+                }else{
+                    this.current_activity.sequenceId = seq
+                }
+                this.showActivityModal = 1
             },
-            addBackBone: function () {
-                this.backboneList.push(this.activityObject);
+            addstory: function (seq,backbone_index) {
+                this.current_activity = {}
+                this.current_activity.sequenceId = seq
+                this.current_activity.creatorId = this.userId
+                this.current_activity.epicId = this.backboneList[backbone_index].id
+                this.showActivityModal = 1
             },
-            updatebackbone:function(id,name,description){
-                console.log("骨干故事的id，name，desc是 "+id,name,description)
+            addrelease:function(){
+                this.current_release = {}
+                this.showDevelopModal = 1
+            },
+
+            updatebackbone: function (backbone_card, index) {
+                console.log("骨干故事的backbone_card，index是 " + backbone_card, index)
+                this.current_backbone = backbone_card
+                this.current_backbone_index = index
                 this.showBackBoneModal = 2
             },
-            updateactivity:function(id,name,description){
-                console.log("活动的id，name，desc是 "+id,name,description)
+            updateactivity: function (activity_card, backbone_index, activity_index) {
+                console.log("活动的backbone_card，backbone_index,activity_index是 " + activity_card, backbone_index, activity_index)
+                this.current_activity = activity_card
+                this.current_backbone_index = backbone_index
+                this.current_activity_index = activity_index
                 this.showActivityModal = 2
             },
-            updatetask:function(id,name,description){
-                console.log("任务的id，name，desc是 "+id,name,description)
+            updatetask: function (id, name, description) {
+                console.log("任务的id，name，desc是 " + id, name, description)
                 this.showTaskModal = 2
             },
-            getAllData:function() {
-            }
+            updaterelease:function(release_card){
+                this.current_release = release_card
+                this.showDevelopModal = 2
+            },
+            showrelease:function(){
+                
+            },
+            getAllData: function () {
+                _this = this
+                axios({
+                    method: 'get',
+                    url: this.basepath,
+                    data: {
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+
+                })
+                    .then(function (res) {
+                        if (res.data.status == "SUCCESS") {
+                            _this.backboneList = res.data.epicList;
+                            _this.memberList = res.data.memberList;
+                            _this.releaseList = res.data.releaseList;
+
+                            //如果是新的没有东西的项目，先创建一个骨干卡片
+                            if(_this.backboneList.length==0){
+                                _this.initProject()
+                            }
+                        
+                        }
+                        else {
+                            alert("请求数据失败，请刷新页面重试")
+                        }
+                    });
+            },
+            initProject:function(){
+                this.current_backbone = {
+                    creatorId: 0,
+                    description: "编辑你的第一张卡片",
+                    sequenceId: 1,
+                    title: "现在开始吧！"
+                }
+                this.addOrUpdateBackbone(this.current_backbone,0)
+            },
+            addOrUpdateBackbone: function (current_backbone, index) {
+                _this = this;
+                console.log(current_backbone)
+                axios({
+                    method: 'post',
+                    url: this.basepath + "epic",
+                    data: current_backbone,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data.status == "SUCCESS") {
+                            _this.backboneList = res.data.epicList
+                            _this.showBackBoneModal = 0
+                            _this.current_backbone = {}
+                        } else {
+                            alert("网络请求失败，请重新编辑")
+                        }
+                    });
+            },
+            addOrUpdateActivity: function (current_activity,backbone_index,activity_index) {
+                _this = this;
+                console.log(current_activity)
+                axios({
+                    method: 'post',
+                    url: this.basepath + "activity",
+                    data: current_activity,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data.status == "SUCCESS") {
+                            _this.backboneList= res.data.epicList
+                            _this.showActivityModal = 0
+                            _this.current_activity = {}
+                        } else {
+                            alert("网络请求失败，请重新编辑")
+                        }
+
+                    });
+            },
+            addOrUpdateTask: function (current_task) {
+                axios({
+                    method: 'post',
+                    url: this.basepath + "task",
+                    data:current_task,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data.status == "SUCCESS") {
+                            _this.backboneList= res.data.epicList
+                            _this.showTaskModal = 0
+                            _this.current_task = {}
+                        } else {
+                            alert("网络请求失败，请重新编辑")
+                        }
+
+
+                    });
+            },
+            addOrUpdateRelease: function (current_release) {
+                console.log(current_release)
+                axios({
+                    method: 'post',
+                    url: this.basepath + "release",
+                    data: current_release,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data.status == "SUCCESS") {
+                            _this.backboneList= res.data.epicList
+                            _this.releaseList = res.data.releaseList
+                            _this.showDevelopModal = 0
+                            _this.current_release = {}
+                        } else {
+                            alert("网络请求失败，请重新编辑")
+                        }
+                    });
+            },
+
+            deleteBackbone: function () {
+
+            },
+            deleteActivity: function () {
+
+            },
+            deleteRelease:function(){
+
+            },
+            //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+            dateFormat:function(time) {
+                var date=new Date(time);
+                var year=date.getFullYear();
+                /* 在日期格式中，月份是从0开始的，因此要加0
+                * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+                * */
+                var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+                var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+                var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+                var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+                var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+                // 拼接
+                return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+            },
+           
         },
         created() {
             //自动加载indexs方法
             this.indexs();
             this.getAllData();
-        }
+        },
     })
 </script>
-
-
