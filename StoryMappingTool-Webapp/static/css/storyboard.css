@@ -21,7 +21,15 @@
     color: #2a91d94a;
     /* color: #2a91d9; */
 }
-
+.task-extend-span{
+  font-size: 86px;
+  color: #32c5d270;
+  padding-left: 30%;
+  opacity: 0;
+}                   
+.task-extend-span:hover {
+  opacity: 1;
+} 
 
 .activity-extend-span{
   font-style: inherit;
@@ -66,7 +74,7 @@ right: -5.25px;
 
 .modal-mask {
   position: fixed;
-  z-index: 9999;
+  z-index: 1500;
   top: 0;
   left: 0;
   width: 100%;
@@ -127,4 +135,15 @@ right: -5.25px;
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+
+.icon-add-left{
+  float: left;
+}
+.icon-add-right{
+  float: right;
+}
+.icon-add-center{
+  margin-inline-start: 44%;
 }
