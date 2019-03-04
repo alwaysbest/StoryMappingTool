@@ -787,8 +787,8 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 
 .dashboard-stat .more>i {
     display: inline-block;
-    margin-top: 1px;
-    float: right;
+    /* margin-top: 1px; */
+    /* float: right; */
 }
 
 .m-icon-swapright {
@@ -1815,6 +1815,10 @@ ul.tpl-dropdown-content li>a.tpl-dropdown-content-message:last-child {
 
 .tpl-btn-bg-color-success {
     background-color: #36c6d3!important;
+    border: none;
+}
+.tpl-btn-bg-color-danger {
+    background-color: #F37B1D!important;
     border: none;
 }
 
