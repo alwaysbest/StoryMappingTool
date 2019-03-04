@@ -69,4 +69,22 @@ public class Story {
 
     public Story() {
     }
+
+    @Override
+    public String toString() {
+        return "Story{" +
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", epicId=" + epicId +
+                ", activityId=" + activityId +
+                ", releaseId=" + releaseId +
+                ", sequenceId=" + sequenceId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", points=" + points +
+                ", start=" + start +
+                ", end=" + end +
+                ", status=" + status +
+                '}';
+    }
 }

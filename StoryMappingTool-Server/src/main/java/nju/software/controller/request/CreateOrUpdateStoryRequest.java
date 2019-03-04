@@ -21,4 +21,22 @@ public class CreateOrUpdateStoryRequest {
     private String end;
     private int points;
     private int status;
+
+    public CreateOrUpdateStoryRequest() {
+    }
+
+    public CreateOrUpdateStoryRequest(int id, int epicId, int activityId, int releaseId, int creatorId, int sequenceId, String title, String description, String start, String end, int points, int status) {
+        this.id = id;
+        this.epicId = epicId;
+        this.activityId = activityId;
+        this.releaseId = releaseId;
+        this.creatorId = creatorId;
+        this.sequenceId = sequenceId;
+        this.title = title;
+        this.description = description;
+        this.start = start;
+        this.end = end;
+        this.points = points;
+        this.status = status;
+    }
 }

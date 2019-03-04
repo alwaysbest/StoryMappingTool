@@ -2,6 +2,7 @@ package nju.software.service;
 
 import nju.software.App;
 import nju.software.entity.Status;
+import nju.software.entity.Story;
 import nju.software.util.StringUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -108,7 +109,7 @@ public class ProjectManageServiceTest {
         String title = "test epic title";
         String description = "test epic description";
         assertNull(service.updateEpic(id, projectId, sequenceId, title, description));
-        assertEquals(0,service.getEpicsByProject(3).size());
+        assertEquals(0, service.getEpicsByProject(3).size());
     }
 
     @Test
@@ -180,7 +181,9 @@ public class ProjectManageServiceTest {
         Date end = StringUtil.string2Date("20180301");
         Status status = Status.DOING;
         assertNotNull(service.createStory(projectId, epicId, activityId, releaseId, sequenceId, title, description, points, start, end, status));
-        assertNotNull(service.getStoriesByProject(1));
+        for (Story story : service.getStoriesByProject(1)) {
+            System.out.println(story);
+        }
     }
 
     @Test

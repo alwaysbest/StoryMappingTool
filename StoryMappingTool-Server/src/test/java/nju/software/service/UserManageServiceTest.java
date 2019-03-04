@@ -46,7 +46,8 @@ public class UserManageServiceTest {
     @Test
     @Transactional
     public void test4() {
-        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1a2b"));//验证码不正确
-        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1A2B"));//验证码正确
+//        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1a2b"));//验证码不正确
+//        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1A2B"));//验证码正确
+        assertTrue(service.register("lereina","1063162676@qq.com","123456","ABCD"));
     }
 }
