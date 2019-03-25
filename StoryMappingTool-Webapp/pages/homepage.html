@@ -60,8 +60,8 @@
     </header>
     <el-row>
         <el-col :span="2">
-            <el-button type="default" @click="dialogFormVisible=true">新建故事</el-button>
-            <el-dialog title="新建故事" :visible.sync="dialogFormVisible">
+            <el-button type="default" @click="dialogFormVisible=true">新建项目</el-button>
+            <el-dialog title="新建项目" :visible.sync="dialogFormVisible">
                 <el-form :model="mapForm" status-icon :rules="validateForm" ref="mapForm" label-width="100px" label-position="left">
                     <el-form-item label="名称"prop="title">
                         <el-input type="text" v-model="mapForm.title" auto-complete="off" placeholder="请输入名称">
@@ -77,15 +77,32 @@
                     </el-form-item>
                 </el-form>
             </el-dialog>
+            <el-dialog title="修改项目" :visible.sync="dialogModifyDescriptionVisible">
+                <el-form :model="modifyForm" status-icon :rules="validateModifyForm" ref="modifyForm" label-width="100px" label-position="left">
+                    <el-form-item label="名称"prop="title">
+                        <el-input type="text" v-model="modifyForm.title" auto-complete="off" placeholder="title">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="描述"prop="description">
+                        <el-input type="textarea" :rows="2" v-model="modifyForm.description" auto-complete="off"placeholder="description">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item >
+                        <el-button style="float: right;"type="success" @click="submitModifyForm('modifyForm')">确认</el-button>
+                        <el-button style="float: right; margin-right:10px"type="default" @click="dialogModifyDescriptionVisible=false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
         </el-col>
             <el-col :span="22">
                 <el-col :span="6" v-for="(project, index) in projectList" :key="project.id">
-                    <el-card :body-style="{ padding: '0px' }" shadow="hover" >
+                    <el-card :body-style="{ padding: '0px' }"    shadow="hover" >
                         <div slot="header" class="clearfix">
 
-                            <span>{{ project.title }}</span>
-                            <el-button style="float: right; padding: 5px 0" type="text" @click="showMemberDialog(project.id)">添加成员</el-button>
-                            <el-button style="float: right; padding: 5px 0;margin-right:10px" type="text" @click="getDetail(project.id)">查看详情</el-button>
+                            <el-label style="cursor: pointer" @click="getDetail(project.id)">{{ project.title }}</el-label>
+                            <el-button style="float: right; padding: 5px 0" type="text" @click="showMemberDialog(project.id)">管理成员</el-button>
+                            <el-button style="float: right; padding: 5px 0;margin-right:10px" type="text" @click="modifyDescription(project.id,index)">修改项目</el-button>
+
                         </div>
                         <div style="padding: 10px;">
 
@@ -97,11 +114,19 @@
 
 
             </el-col>
-        <el-dialog title="邀请成员" :visible.sync="dialogMemberVisible">
-            <el-input autocomplete="off" placeholder="请输入成员邮箱" clearable v-model="memberEmail">
+        <el-dialog title="管理成员" :visible.sync="dialogMemberVisible">
+            <el-input autocomplete="off" placeholder="请输入成员邮箱邀请成员" clearable v-model="memberEmail">
                 <el-button slot="append" icon="el-icon-check" @click="submitMember()"></el-button>
 
             </el-input>
+            <ul>
+                <template v-for="(member,index) in memberList" :key="index">
+                    <li>{{member[0]}}<Icon class="el-icon-delete"style="cursor: pointer" @click="deleteMember(index)"></Icon></li>
+
+                </template>
+            </ul>
+
+
 
         </el-dialog>
 
@@ -121,10 +146,20 @@ new Vue({
             creatorId:0,
             title:"",
             description:"",
+
         },
         dialogFormVisible: false,
         dialogMemberVisible:false,
+        dialogModifyDescriptionVisible:false,
         validateForm:{
+                 title:[
+                    { required: true, message: '请输入故事名称', trigger: 'blur' },
+                 ],
+                 description:[
+                   { required: true, message: '请输入故事描述',trigger: 'blur' },
+                 ],
+         },
+         validateModifyForm:{
                  title:[
                     { required: true, message: '请输入故事名称', trigger: 'blur' },
                  ],
@@ -136,10 +171,70 @@ new Vue({
             title:'',
             description:'',
         },
+         modifyForm:{
+            id:0,
+            index:0,
+            title:'title',
+            description:'description',
+        },
         memberEmail:'',
         projectId:0,
+        memberList:[],
     },
     methods:{
+        deleteMember:function(index){
+            var member=this.memberList[index][1];
+            alert(member);
+        },
+        modifyDescription:function(pId,index){
+            this.dialogModifyDescriptionVisible=true;
+            this.modifyForm.id=pId;
+            this.modifyForm.index=index;
+            this.modifyForm.title=this.projectList[index]['title'];
+            this.modifyForm.description=this.projectList[index]['description'];
+
+
+        },
+        submitModifyForm(formName){
+            this.$refs[formName].validate((valid)=>{
+                if(valid){
+                    var creatorId=sessionStorage.getItem('uid');
+                    var title=this.modifyForm.title;
+                    var  description=this.modifyForm.description;
+                    var id=this.modifyForm.id;
+                    axios.post(
+                        'http://172.19.240.113/ui/project',
+                        {
+                            id:id,
+                            creatorId:creatorId,
+                            title:title,
+                            description:description
+                        },
+
+                        {headers:{
+                            'Content-Type':'application/json'
+                            }
+                        },
+                     )
+                      .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                            var index=this.modifyForm.index;
+                            this.projectList[index]['title']=response.data.project['title'];
+                            this.projectList[index]['description']=response.data.project['description'];
+                            this.dialogModifyDescriptionVisible=false;
+                         }else{
+                            this.$message.info('修改项目失败');
+                         }
+
+                    })
+
+
+                }else{
+                    this.$message.error("请输入项目信息");
+                }
+            });
+        },
         showName:function(){
             if (sessionStorage.getItem('username')===null){
                 window.location.href="login.html";
@@ -201,13 +296,13 @@ new Vue({
                             this.dialogFormVisible=false;
                             this.getProject();
                          }else{
-                            this.$message.info('新建故事失败');
+                            this.$message.info('新建项目失败');
                          }
 
                     })
 
                 }else{
-                    this.$message.error("请输入故事信息");
+                    this.$message.error("请输入项目信息");
                 }
             });
         },
@@ -226,13 +321,26 @@ new Vue({
                 )
                 .then((response)=>{
                          if(response.data.status==='SUCCESS'){
-                            this.dialogMemberVisible=false;
+                            <!--this.dialogMemberVisible=false;-->
                             this.$message.success("添加成员成功");
+                             axios.get(
+                                 'http://172.19.240.113/ui/project/'+this.projectId,
+                            )
+                      .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                           this.memberList=response.data.memberList;
+                           <!--alert(this.memberList[0][0]);-->
+                         }else{
+                            this.$message.info('获取成员失败');
+                         }
+
+                    })
                          }else if (response.data.status==='NOT_EXIST'){
                              this.$message.success("用户不存在");
                          }else if (response.data.status==='ALREADY_EXIST'){
                              this.$message.info("成员已在团队中");
-                             this.dialogMemberVisible=false;
+                             <!--this.dialogMemberVisible=false;-->
                          }
 
 
@@ -243,6 +351,20 @@ new Vue({
         showMemberDialog(pid){
             this.projectId=pid;
             this.dialogMemberVisible=true;
+             axios.get(
+                        'http://172.19.240.113/ui/project/'+pid,
+
+                     )
+                      .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                           this.memberList=response.data.memberList;
+                           <!--alert(this.memberList[0][0]);-->
+                         }else{
+                            this.$message.info('获取成员失败');
+                         }
+
+                    })
 
         },
     },
