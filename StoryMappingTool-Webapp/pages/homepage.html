@@ -120,10 +120,10 @@
 
             </el-input>
             <ul>
-                <template v-for="(member,index) in memberList" :key="index">
+                <el-col v-for="(member,index) in memberList" :key="index">
                     <li>{{member[0]}}<Icon class="el-icon-delete"style="cursor: pointer" @click="deleteMember(index)"></Icon></li>
 
-                </template>
+                </el-col>
             </ul>
 
 
@@ -182,6 +182,23 @@ new Vue({
         memberList:[],
     },
     methods:{
+        <!--download:function(){-->
+            <!--var Message = "\u8bf7\u9009\u62e9\u6587\u4ef6\u5939";-->
+        <!--var Shell = new ActiveXObject("Shell.Application");-->
+        <!--var Folder = Shell.BrowseForFolder(0, Message, 64, 17);-->
+        <!--&lt;!&ndash;var Folder = Shell.BrowseForFolder(0, Message, 0); //起始目录为：桌面&ndash;&gt;-->
+        <!--if (Folder != null) {-->
+            <!--Folder = Folder.items();-->
+            <!--Folder = Folder.item();-->
+            <!--Folder = Folder.Path;-->
+            <!--if (Folder.charAt(Folder.length - 1) != "\\") {-->
+                <!--Folder = Folder + "\\";-->
+            <!--}-->
+
+            <!--alert(Folder);-->
+        <!--}-->
+
+        <!--},-->
         deleteMember:function(index){
             var member=this.memberList[index][1];
             alert(member);
@@ -371,6 +388,7 @@ new Vue({
     created(){
         this.showName();
         this.getProject();
+
     },
 });
 
