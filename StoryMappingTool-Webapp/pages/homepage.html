@@ -6,6 +6,7 @@
     <script src="../static/js/vue.js"></script>
     <script src="../static/js/index.js"></script>
     <script src="../static/js/axios.js"></script>
+    <script src="../static/js/html2canvas.js"></script>
     <link rel="stylesheet" href="../static/css/index.css"/>
     <link rel="stylesheet" href="../static/css/amazeui.min.css" />
     <link rel="stylesheet" href="../static/css/admin.css">
@@ -120,8 +121,8 @@
 
             </el-input>
             <ul>
-                <el-col v-for="(member,index) in memberList" :key="index">
-                    <li>{{member[0]}}<Icon class="el-icon-delete"style="cursor: pointer" @click="deleteMember(index)"></Icon></li>
+                <el-col :span="3" v-for="(member,index) in memberList" :key="index">
+                    <li style="float:left">{{member[0]}}<Icon class="el-icon-delete"style="cursor: pointer" @click="deleteMember(index)"></Icon></li>
 
                 </el-col>
             </ul>
