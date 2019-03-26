@@ -40,6 +40,8 @@
         <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
 
             <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+                <li  style="cursor: pointer" @click="downloadPng()"><Icon class="el-icon-download" ></Icon><span>下载</span></li>
+
 
                 <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
                         class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
@@ -183,23 +185,35 @@ new Vue({
         memberList:[],
     },
     methods:{
-        <!--download:function(){-->
-            <!--var Message = "\u8bf7\u9009\u62e9\u6587\u4ef6\u5939";-->
-        <!--var Shell = new ActiveXObject("Shell.Application");-->
-        <!--var Folder = Shell.BrowseForFolder(0, Message, 64, 17);-->
-        <!--&lt;!&ndash;var Folder = Shell.BrowseForFolder(0, Message, 0); //起始目录为：桌面&ndash;&gt;-->
-        <!--if (Folder != null) {-->
-            <!--Folder = Folder.items();-->
-            <!--Folder = Folder.item();-->
-            <!--Folder = Folder.Path;-->
-            <!--if (Folder.charAt(Folder.length - 1) != "\\") {-->
-                <!--Folder = Folder + "\\";-->
-            <!--}-->
+             //下载图片
+             downloadPng:function(){
+                let canvasID = document.getElementById('app');
+                let that = this;
+                let a = document.createElement('a');
+                html2canvas(canvasID).then(canvas => {
+                    let dom = document.body.appendChild(canvas);
+                    dom.style.display = "none";
+                    a.style.display = "none";
+                    document.body.removeChild(dom);
+                    let blob = that.dataURLToBlob(dom.toDataURL("image/png"));
+                    a.setAttribute("href", URL.createObjectURL(blob));
+                    a.setAttribute("download", "screen_cut.png")
+                    document.body.appendChild(a);
+                    a.click();
+                    URL.revokeObjectURL(blob);
+                    document.body.removeChild(a);
+                });
+            },
+            //图片转格式
+            dataURLToBlob:function(dataUrl){
+                var arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr], {type: mime})
+            },
 
-            <!--alert(Folder);-->
-        <!--}-->
-
-        <!--},-->
         deleteMember:function(index){
             var member=this.memberList[index][1];
             alert(member);

@@ -21,42 +21,44 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="../static/js/html2canvas.js"></script>
+
 </head>
 
 <body>
-    <header class="am-topbar am-topbar-inverse admin-header">
-        <div class="am-topbar-brand">
-            <a href="../pages/homepage.html" class="tpl-logo">
-                <img src="../static/img/logo.png" alt="">
-            </a>
-        </div>
 
-        <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
 
-            <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
-                <li><Icon class="el-icon-time"></Icon><span>日志</span></li>
-                <li @click.native="downloadPng()"><Icon class="el-icon-download"></Icon><span>下载</span></li>
+    <div id="app" class="tpl-page-container tpl-page-header-fixed" ref="cutScreen">
+        <header class="am-topbar am-topbar-inverse admin-header">
+            <div class="am-topbar-brand">
+                <a href="../pages/homepage.html" class="tpl-logo">
+                    <img src="../static/img/logo.png" alt="">
+                </a>
+            </div>
 
-                <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
+            <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
+
+                <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+                    <li style="cursor: pointer"><Icon class="el-icon-time"></Icon><span>日志</span></li>
+                    <li  style="cursor: pointer" @click="downloadPng()"><Icon class="el-icon-download" ></Icon><span>下载</span></li>
+
+                    <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
                             class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
 
-                <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
-                    <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                        <span class="tpl-header-list-user-nick"></span><span class="tpl-header-list-user-ico"> <img
+                    <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>
+                        <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
+                            <span class="tpl-header-list-user-nick"></span><span class="tpl-header-list-user-ico"> <img
                                 src="../static/img/user.png"></span>
-                    </a>
-                    <ul class="am-dropdown-content">
-                        <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
-                        <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
-                        <li><a href="../pages/login.html"><span class="am-icon-power-off"></span> 退出</a></li>
-                    </ul>
-                </li>
-                <li><a href="../pages/login.html" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
-            </ul>
-        </div>
-    </header>
-
-    <div id="app" class="tpl-page-container tpl-page-header-fixed" ref="resultCanvas">
+                        </a>
+                        <ul class="am-dropdown-content">
+                            <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
+                            <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
+                            <li><a href="../pages/login.html"><span class="am-icon-power-off"></span> 退出</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="../pages/login.html" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
+                </ul>
+            </div>
+        </header>
         <!--上面的周期-->
         <ul class="activity-ul">
             <li class="backbone-li" v-for="(backbone,index_backbone) in backboneList">
@@ -658,6 +660,7 @@
 
 <script>
 
+
     //注册组件
     Vue.component('back-bone-component', {
         template: '#back_bone_component',
@@ -667,33 +670,7 @@
             }
         },
         methods: {
-            downloadPng:function(){
-                let canvasID = this.$refs.resultCanvas;
-                let that = this;
-                let a = document.createElement('a');
-                html2canvas(canvasID).then(canvas => {
-                    let dom = document.body.appendChild(canvas);
-                    dom.style.display = "none";
-                    a.style.display = "none";
-                    document.body.removeChild(dom);
-                    let blob = that.dataURLToBlob(dom.toDataURL("image/png"));
-                    a.setAttribute("href", URL.createObjectURL(blob));
-                    a.setAttribute("download", "xxxxxx.png")
-                    document.body.appendChild(a);
-                    a.click();
-                    URL.revokeObjectURL(blob);
-                    document.body.removeChild(a);
-                });
 
-            },
-            dataURLToBlob:function(dataUrl){
-                var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
-                return new Blob([u8arr], {type: mime})
-            },
             doubleclick: function () {
                 this.$emit('doubleclick', this.backbone_card, this.index);
             },
@@ -1241,6 +1218,41 @@
                 // 拼接
                 return year+month+day;
             },
+            //下载图片
+             downloadPng:function(){
+                <!--let canvasID = document.getElementById('app');-->
+                let canvasID = this.$refs.cutScreen;
+                let that = this;
+                let a = document.createElement('a');
+                setTimeout(function(){
+                    html2canvas(canvasID)
+                    .then(canvas => {
+                    let dom = document.body.appendChild(canvas);
+                    dom.style.display = "none";
+                    a.style.display = "none";
+                    document.body.removeChild(dom);
+                    let blob = that.dataURLToBlob(dom.toDataURL("image/png"));
+                    a.setAttribute("href", URL.createObjectURL(blob));
+                    a.setAttribute("download", "screen_cut.png")
+                    document.body.appendChild(a);
+                    a.click();
+                    URL.revokeObjectURL(blob);
+                    document.body.removeChild(a);
+                });
+
+                },1000);
+
+            },
+            //图片转格式
+            dataURLToBlob:function(dataUrl){
+                var arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr], {type: mime})
+            },
+
            
         },
         created() {
