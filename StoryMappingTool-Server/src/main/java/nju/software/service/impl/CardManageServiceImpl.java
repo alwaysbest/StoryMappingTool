@@ -1,10 +1,7 @@
 package nju.software.service.impl;
 
 import nju.software.entity.*;
-import nju.software.repo.ActivityRepo;
-import nju.software.repo.EpicRepo;
-import nju.software.repo.ReleaseRepo;
-import nju.software.repo.StoryRepo;
+import nju.software.repo.*;
 import nju.software.service.CardManageService;
 import nju.software.service.ProjectManageService;
 import org.springframework.stereotype.Service;
@@ -19,8 +16,6 @@ import java.util.Optional;
 @Service
 public class CardManageServiceImpl implements CardManageService {
 
-    @Resource
-    ProjectManageService projectManageService;
 
     @Resource
     private EpicRepo epicRepo;
@@ -33,6 +28,9 @@ public class CardManageServiceImpl implements CardManageService {
 
     @Resource
     private ReleaseRepo releaseRepo;
+
+    @Resource
+    private LogRepo logRepo;
 
     @Override
     public Epic insertEpic(int projectId, int sequenceId, String title, String description) {
