@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 @CrossOrigin
 @Controller
 @ResponseBody
-@RequestMapping(value = "/project/{id}")
+@RequestMapping(value = "/ui/project/{id}")
 public class CardController {
     @Resource
     private CardManageService cardManageService;
