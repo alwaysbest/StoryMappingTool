@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Author     : tangdaye
  * Description: SpringBoot 运行入口
  */
+
 @SpringBootApplication
 public class App {
     public static void main(String[] args) {

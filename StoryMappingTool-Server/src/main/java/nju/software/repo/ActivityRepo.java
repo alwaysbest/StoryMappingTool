@@ -14,4 +14,9 @@ import java.util.List;
 @Repository
 public interface ActivityRepo extends JpaRepository<Activity, Integer> {
     List<Activity> findActivitiesByProjectId(int projectId);
+
+    List<Activity> findActivitiesByProjectIdAndEpicIdAndSequenceIdAfter(int projectId, int epicId, int sequenceId);
+
+    List<Activity> findActivitiesByEpicIdOrderBySequenceId(int epicId);
+
 }

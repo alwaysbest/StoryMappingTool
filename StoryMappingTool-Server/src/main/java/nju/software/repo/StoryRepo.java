@@ -15,4 +15,13 @@ import java.util.List;
 @Repository
 public interface StoryRepo extends JpaRepository<Story, Integer> {
     List<Story> findStoriesByProjectId(int projectId);
+
+    List<Story> findStoriesByProjectIdAndEpicIdAndActivityIdAndSequenceIdAfter(int projectId, int epicId, int activityId, int sequenceId);
+
+    List<Story> findStoriesByActivityIdOrderBySequenceId(int activityId);
+
+    void deleteStoriesByActivityId(int activityId);
+
+    List<Story> findStoriesByReleaseId(int releaseId);
+
 }

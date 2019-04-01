@@ -45,4 +45,13 @@ public class EpicRepoTest {
         Epic dto = repo.saveAndFlush(epic);
         System.out.println(dto);
     }
+
+    @Test
+    @Transactional
+    public void test3(){
+        int proId = 1;
+        int sequenceId = 4;
+        List<Epic> list = repo.findEpicsByProjectIdAndSequenceIdAfter(proId, sequenceId);
+        System.out.println(list.size());
+    }
 }
