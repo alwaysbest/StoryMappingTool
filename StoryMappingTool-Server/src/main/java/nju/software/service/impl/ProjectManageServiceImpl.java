@@ -116,6 +116,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     }
 
     @Override
+    public boolean removeMember(int projectId, int userId) {
+        UserProject userProject = userProjectRepo.findUserProjectByUserIdAndProjectId(userId, projectId);
+        if(userProject == null || userProject.getId() <=0){
+            return false;
+        }else{
+            userProjectRepo.delete(userProject);
+            userProjectRepo.flush();
+            return true;
+        }
+    }
+
+    @Override
     public Epic createEpic(int projectId, int sequenceId, String title, String description) {
         //todo: move epic after this
         Epic epic = new Epic(projectId, sequenceId, title, description);

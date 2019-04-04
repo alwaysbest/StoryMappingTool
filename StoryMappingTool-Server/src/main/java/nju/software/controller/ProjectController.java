@@ -3,6 +3,7 @@ package nju.software.controller;
 import nju.software.controller.request.*;
 import nju.software.controller.response.*;
 import nju.software.entity.*;
+import nju.software.service.LogService;
 import nju.software.service.ProjectManageService;
 import nju.software.service.UserManageService;
 import nju.software.util.StringUtil;
@@ -26,14 +27,18 @@ public class ProjectController {
     @Resource
     private UserManageService userManageService;
 
+    @Resource
+    private LogService logService;
+
     @RequestMapping(value = "/project", method = RequestMethod.POST)
     public CreateOrUpdateProjectResponse createProject(@RequestBody CreateOrUpdateProjectRequest request) {
         CreateOrUpdateProjectResponse response = new CreateOrUpdateProjectResponse();
-        if (request.getProjectId() == 0 || projectManageService.existProject(request.getProjectId())) {
+        if (projectManageService.existProject(request.getProjectId())) {
             Project p = projectManageService.updateProject(request.getProjectId(), request.getTitle(), request.getDescription());
             if (p != null) {
                 response.setStatus("SUCCESS");
                 response.setProject(p);
+                logService.insertLog(p.getId(), request.getCreatorId(), Item.PROJECT, p.getId(), p.getTitle(), OperationType.MODIFY);
             } else {
                 response.setStatus("FAILURE");
             }
@@ -42,6 +47,7 @@ public class ProjectController {
             if (p != null) {
                 response.setStatus("SUCCESS");
                 response.setProject(p);
+                logService.insertLog(p.getId(), request.getCreatorId(), Item.PROJECT, p.getId(), p.getTitle(), OperationType.CREATE);
             } else {
                 response.setStatus("FAILURE");
             }
@@ -74,6 +80,29 @@ public class ProjectController {
         }
         return response;
 
+    }
+
+    @RequestMapping(value = "/project/{id}/remove-member", method = RequestMethod.POST)
+    public RemoveProjectMemberResponse removeProjectMember(@PathVariable String id, @RequestBody String userId){
+        RemoveProjectMemberResponse response = new RemoveProjectMemberResponse();
+        if (!(StringUtil.isNumeric(id) && StringUtil.isNumeric(userId))) {
+            response.setStatus("NOT_EXIST");
+            return response;
+        }
+        int idInt = Integer.parseInt(id);
+        int user = Integer.parseInt(userId);
+        if (!projectManageService.existProject(idInt)) {
+            response.setStatus("NOT_EXIST");
+            return response;
+        }
+
+        boolean flag = projectManageService.removeMember(idInt, user);
+        if (flag) {
+            response.setStatus("SUCCESS");
+        } else {
+            response.setStatus("NOT_EXIST_THIS_MEMBER");
+        }
+        return response;
     }
 
     @RequestMapping(value = "/list-project", method = RequestMethod.POST)
@@ -119,6 +148,7 @@ public class ProjectController {
             Epic epic = projectManageService.createEpic(idInt, request.getSequenceId(), request.getTitle(), request.getDescription());
             if (epic != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(epic.getProjectId(), request.getCreatorId(), Item.PROJECT, epic.getId(), epic.getTitle(), OperationType.CREATE);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -127,6 +157,7 @@ public class ProjectController {
             Epic epic = projectManageService.updateEpic(request.getId(), idInt, request.getSequenceId(), request.getTitle(), request.getDescription());
             if (epic != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(epic.getProjectId(), request.getCreatorId(), Item.PROJECT, epic.getId(), epic.getTitle(), OperationType.MODIFY);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -150,6 +181,7 @@ public class ProjectController {
                     request.getTitle(), request.getDescription());
             if (activity != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(activity.getProjectId(), request.getCreatorId(), Item.PROJECT, activity.getId(), activity.getTitle(), OperationType.CREATE);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -159,6 +191,7 @@ public class ProjectController {
                     request.getSequenceId(), request.getTitle(), request.getDescription());
             if (activity != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(activity.getProjectId(), request.getCreatorId(), Item.PROJECT, activity.getId(), activity.getTitle(), OperationType.MODIFY);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -194,6 +227,7 @@ public class ProjectController {
             );
             if (story != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(story.getProjectId(), request.getCreatorId(), Item.PROJECT, story.getId(), story.getTitle(), OperationType.CREATE);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -215,6 +249,7 @@ public class ProjectController {
             );
             if (story != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(story.getProjectId(), request.getCreatorId(), Item.PROJECT, story.getId(), story.getTitle(), OperationType.MODIFY);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -246,6 +281,8 @@ public class ProjectController {
             );
             if (release != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(release.getProjectId(), request.getCreatorId(),
+                        Item.PROJECT, release.getId(), release.getTitle(), OperationType.CREATE);
             } else {
                 response.setStatus("FAILURE");
                 return response;
@@ -263,6 +300,8 @@ public class ProjectController {
             );
             if (release != null) {
                 response.setStatus("SUCCESS");
+                logService.insertLog(release.getProjectId(), request.getCreatorId(),
+                        Item.PROJECT, release.getId(), release.getTitle(), OperationType.MODIFY);
             } else {
                 response.setStatus("FAILURE");
                 return response;
