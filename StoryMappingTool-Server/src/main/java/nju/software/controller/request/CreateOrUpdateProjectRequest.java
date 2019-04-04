@@ -8,8 +8,9 @@ import lombok.*;
  * Description: /project request
  */
 @Data
-public class CreateProjectRequest {
+public class CreateOrUpdateProjectRequest {
     private int creatorId;
+    private int projectId;
     private String title;
     private String description;
 }

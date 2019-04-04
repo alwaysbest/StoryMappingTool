@@ -9,9 +9,8 @@ import nju.software.entity.Project;
  * Description: /project response
  */
 @Data
-public class CreateProjectResponse {
+public class CreateOrUpdateProjectResponse {
     private String status;
 
     private Project project;
-
 }

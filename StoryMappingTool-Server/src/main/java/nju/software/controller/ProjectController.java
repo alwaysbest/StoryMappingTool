@@ -27,17 +27,28 @@ public class ProjectController {
     private UserManageService userManageService;
 
     @RequestMapping(value = "/project", method = RequestMethod.POST)
-    public CreateProjectResponse createProject(@RequestBody CreateProjectRequest request) {
-        CreateProjectResponse response = new CreateProjectResponse();
-        Project p = projectManageService.createProject(request.getCreatorId(), request.getTitle(), request.getDescription());
-        if (p != null) {
-            response.setStatus("SUCCESS");
-            response.setProject(p);
+    public CreateOrUpdateProjectResponse createProject(@RequestBody CreateOrUpdateProjectRequest request) {
+        CreateOrUpdateProjectResponse response = new CreateOrUpdateProjectResponse();
+        if (request.getProjectId() == 0 || projectManageService.existProject(request.getProjectId())) {
+            Project p = projectManageService.updateProject(request.getProjectId(), request.getTitle(), request.getDescription());
+            if (p != null) {
+                response.setStatus("SUCCESS");
+                response.setProject(p);
+            } else {
+                response.setStatus("FAILURE");
+            }
         } else {
-            response.setStatus("FAILURE");
+            Project p = projectManageService.createProject(request.getCreatorId(), request.getTitle(), request.getDescription());
+            if (p != null) {
+                response.setStatus("SUCCESS");
+                response.setProject(p);
+            } else {
+                response.setStatus("FAILURE");
+            }
         }
         return response;
     }
+
 
     @RequestMapping(value = "/project/{id}/invite-members", method = RequestMethod.POST)
     public InviteMemberResponse inviteMember(@PathVariable String id, @RequestBody InviteMemberRequest request) {

@@ -84,6 +84,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     }
 
     @Override
+    public Project updateProject(int projectId, String title, String description) {
+        Optional<Project> projectOptional = projectRepo.findById(projectId);
+        if (!projectOptional.isPresent()){
+            return null;
+        }
+        Project p = projectOptional.get();
+        p.setTitle(title);
+        p.setDescription(description);
+        return projectRepo.saveAndFlush(p);
+    }
+
+    @Override
     public boolean existProject(int id) {
         return projectRepo.existsById(id);
     }
