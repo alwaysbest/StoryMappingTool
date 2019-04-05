@@ -80,4 +80,17 @@ public class UserManageServiceImpl implements UserManageService {
         User result = repo.saveAndFlush(userDto);
         return result != null;
     }
+
+    @Override
+    public String getUsername(int userId) {
+        if(userId <= 0){
+            return null;
+        }
+        User user = repo.getOne(userId);
+        if(user!=null){
+            return user.getUsername();
+        }else{
+            return null;
+        }
+    }
 }
