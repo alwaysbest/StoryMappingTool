@@ -1031,6 +1031,7 @@
                             //如果是新的没有东西的项目，先创建一个骨干卡片
                             if(_this.backboneList.length==0){
                                 _this.initProject()
+                                
                             }
 
                         }
@@ -1051,9 +1052,9 @@
                     sequenceId: 1,
                     title: "MVP迭代",
                     description: "编辑你的第一个迭代吧！",
-                    end: "2019-01-25T16:00:00.000+0000",
-                    start: "2019-01-21T16:00:00.000+0000",
-                    status: "UNDO"
+                    end: "2019-04-25T16:00:00.000+0000",
+                    start: "2019-04-10T16:00:00.000+0000",
+                    status: "UNDO",
                 }
                 this.addOrUpdateBackbone(this.current_backbone,0)
                 this.addOrUpdateRelease(this.current_release)
@@ -1111,15 +1112,15 @@
                 current_task.start=this.dateFormatToPost(current_task.start)
                 current_task.end=this.dateFormatToPost(current_task.end)
 
-                // if(current_task.status=="UNDO"){
-                //     current_task.status=0
-                // }
-                // else if(current_task.status=="DOING"){
-                //     current_task.status=1
-                // }
-                // else{
-                //     current_task.status=2
-                // }
+                if(current_task.status=="UNDO"){
+                    current_task.status=0
+                }
+                else if(current_task.status=="DOING"){
+                    current_task.status=1
+                }
+                else{
+                    current_task.status=2
+                }
                 console.log(current_task)
                 axios({
                     method: 'post',
@@ -1149,21 +1150,21 @@
                 current_release.start=this.dateFormatToPost(current_release.start)
                 current_release.end=this.dateFormatToPost(current_release.end)
 
-                // if(current_release.status=="UNDO"){
-                //     current_release.status=0
-                // }
-                // else if(current_release.status=="DOING"){
-                //     current_release.status=1
-                // }
-                // else{
-                //     current_release.status=2
-                // }
+                if(current_release.status=="UNDO"){
+                    current_release.status=0
+                }
+                else if(current_release.status=="DOING"){
+                    current_release.status=1
+                }
+                else{
+                    current_release.status=2
+                }
 
                 console.log(current_release)
 
                 axios({
                     method: 'post',
-                    url: this.basepath + "insert/release",
+                    url: this.basepath + "release",
                     data: current_release,
                     headers: {
                         'Content-Type': 'application/json',
