@@ -350,6 +350,7 @@ new Vue({
                          if(response.data.status==='SUCCESS'){
                             this.dialogMemberVisible=false;
                             this.$message.success("添加成员成功");
+                            this.memberEmail='';
                              axios.get(
                                  'http://172.19.240.113/ui/project/'+this.projectId,
                             )
@@ -360,14 +361,17 @@ new Vue({
                            <!--alert(this.memberList[0][0]);-->
                          }else{
                             this.$message.info('获取成员失败');
+
                          }
 
                     })
 
                          }else if (response.data.status==='NOT_EXIST'){
                              this.$message.success("用户不存在");
+                             this.memberEmail='';
                          }else if (response.data.status==='ALREADY_EXIST'){
                              this.$message.info("成员已在团队中");
+                             this.memberEmail='';
                              this.dialogMemberVisible=false;
                          }
 
