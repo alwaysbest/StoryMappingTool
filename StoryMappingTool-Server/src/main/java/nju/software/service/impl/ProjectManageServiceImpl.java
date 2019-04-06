@@ -86,7 +86,7 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     @Override
     public Project updateProject(int projectId, String title, String description) {
         Optional<Project> projectOptional = projectRepo.findById(projectId);
-        if (!projectOptional.isPresent()){
+        if (!projectOptional.isPresent()) {
             return null;
         }
         Project p = projectOptional.get();
@@ -116,11 +116,15 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     }
 
     @Override
-    public boolean removeMember(int projectId, int userId) {
-        UserProject userProject = userProjectRepo.findUserProjectByUserIdAndProjectId(userId, projectId);
-        if(userProject == null || userProject.getId() <=0){
+    public boolean removeMember(int projectId, String email) {
+        User userDto = userRepo.findUserByEmail(email);
+        if (userDto == null) {
             return false;
-        }else{
+        }
+        UserProject userProject = userProjectRepo.findUserProjectByUserIdAndProjectId(userDto.getId(), projectId);
+        if (userProject == null || userProject.getId() <= 0) {
+            return false;
+        } else {
             userProjectRepo.delete(userProject);
             userProjectRepo.flush();
             return true;

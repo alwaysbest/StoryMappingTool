@@ -83,20 +83,15 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/project/{id}/remove-member", method = RequestMethod.POST)
-    public RemoveProjectMemberResponse removeProjectMember(@PathVariable String id, @RequestBody String userId){
+    public RemoveProjectMemberResponse removeProjectMember(@PathVariable String id, @RequestBody String email){
         RemoveProjectMemberResponse response = new RemoveProjectMemberResponse();
-        if (!(StringUtil.isNumeric(id) && StringUtil.isNumeric(userId))) {
-            response.setStatus("NOT_EXIST");
-            return response;
-        }
         int idInt = Integer.parseInt(id);
-        int user = Integer.parseInt(userId);
         if (!projectManageService.existProject(idInt)) {
             response.setStatus("NOT_EXIST");
             return response;
         }
 
-        boolean flag = projectManageService.removeMember(idInt, user);
+        boolean flag = projectManageService.removeMember(idInt, email);
         if (flag) {
             response.setStatus("SUCCESS");
         } else {
