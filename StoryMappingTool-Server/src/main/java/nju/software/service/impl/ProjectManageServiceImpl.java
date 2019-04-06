@@ -84,6 +84,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
     }
 
     @Override
+    public Project updateProject(int projectId, String title, String description) {
+        Optional<Project> projectOptional = projectRepo.findById(projectId);
+        if (!projectOptional.isPresent()){
+            return null;
+        }
+        Project p = projectOptional.get();
+        p.setTitle(title);
+        p.setDescription(description);
+        return projectRepo.saveAndFlush(p);
+    }
+
+    @Override
     public boolean existProject(int id) {
         return projectRepo.existsById(id);
     }
@@ -101,6 +113,18 @@ public class ProjectManageServiceImpl implements ProjectManageService {
         UserProject userProject = new UserProject(userDto.getId(), projectId);
         userProjectRepo.saveAndFlush(userProject);
         return true;
+    }
+
+    @Override
+    public boolean removeMember(int projectId, int userId) {
+        UserProject userProject = userProjectRepo.findUserProjectByUserIdAndProjectId(userId, projectId);
+        if(userProject == null || userProject.getId() <=0){
+            return false;
+        }else{
+            userProjectRepo.delete(userProject);
+            userProjectRepo.flush();
+            return true;
+        }
     }
 
     @Override

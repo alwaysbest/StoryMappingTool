@@ -18,4 +18,6 @@ public interface UserManageService {
 
     boolean register(String username, String email, String password, String code);
 
+    String getUsername(int userId);
+
 }

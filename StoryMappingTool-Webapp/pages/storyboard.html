@@ -243,6 +243,12 @@
 
       
     </div>
+
+
+
+
+
+    
     <!-------------------------------------js代码---------------------------------------------->
     <script type="text/x-template" id="back_bone_component">
         <div style="width: 200px;margin-right:5px">
@@ -277,7 +283,8 @@
         </a> -->
                 <a class="more" href="#"> &nbsp;
                     <i class="am-icon-angle-left icon-add-left" @click='insertleft'></i>
-                    <i class="am-icon-angle-right  tpl-left-nav-more-ico-rotate icon-add-center" @click='insertbottom'></i>
+                    <!-- <i class="am-icon-angle-right  tpl-left-nav-more-ico-rotate icon-add-center" @click='insertbottom'></i> -->
+                   
                     <i class="am-icon-angle-right  icon-add-right" @click='insertright'></i>
                 </a>
             </div>
@@ -744,7 +751,7 @@
                 this.$emit('doubleclick', this.release_card);
             },
             addclick:function(){
-                this.$emit('addclick', this.release_card);
+                this.$emit('addclick', this.release_card,this.release_card.sequenceId);
             },
             showrelease:function(){
                 this.$emit('showrelease', this.index);
@@ -810,13 +817,13 @@
         data() {
             return {
                 cities: [{
-                    value: '1',
+                    value: '0',
                     label: 'UNDO'
                 }, {
-                    value: '2',
+                    value: '1',
                     label: 'DOING'
                 }, {
-                    value: '3',
+                    value: '2',
                     label: 'DONE'
                 }],
                 value6: '',
@@ -847,13 +854,13 @@
         data() {
             return {
                 cities: [{
-                    value: '1',
+                    value: '0',
                     label: 'UNDO'
                 }, {
-                    value: '2',
+                    value: '1',
                     label: 'DOING'
                 }, {
-                    value: '3',
+                    value: '2',
                     label: 'DONE'
                 }],
                 date_value:[],
@@ -863,6 +870,7 @@
             clicksubmit: function () {
                 this.release_data_in_modal.start = this.date_value[0]
                 this.release_data_in_modal.end = this.date_value[1]
+                console.log("this",this.release_data_in_modal.status)
                 this.$emit('clicksubmit', this.release_data_in_modal);
             },
             clickdelete: function () {
@@ -931,7 +939,7 @@
             },
             addbackbone: function (seq) {
                 this.current_backbone = {}
-                this.current_backbone.sequenceId = seq
+                this.current_backbone.sequenceId = seq-1
                 this.current_backbone.creatorId = this.userId
                 this.showBackBoneModal = 1
             },
@@ -948,27 +956,33 @@
                         this.current_activity.sequenceId = this.backboneList[backbone_index].activityList[last_index].sequenceId+1
                     }
                 }else{
-                    this.current_activity.sequenceId = seq
+                    this.current_activity.sequenceId = seq-1
                 }
                 this.showActivityModal = 1
             },
             addstory: function (backbone_index,activity_index,release_index,seq_id) {
                 console.log(backbone_index,activity_index,release_index,seq_id)
+                if(this.backboneList[backbone_index].activityList[activity_index]==null){
+                    alert("Please add activity first")
+                }else{
+
+                
                 this.current_story = {}
                 this.current_story.creatorId = this.userId
                 this.current_story.epicId = this.backboneList[backbone_index].id
+                
                 this.current_story.activityId= this.backboneList[backbone_index].activityList[activity_index].id
                 this.current_story.releaseId =this.releaseList[release_index].id
                 this.current_story.sequenceId = seq_id
                 this.showTaskModal = 1
+                }
             },
-            addrelease:function(){
+            addrelease:function(release,seq){
                 this.current_release = {}
+                this.current_release.sequenceId = seq-1
                 this.showDevelopModal = 1
             },
-            deleteTask:function(){
-
-            },
+         
 
             updatebackbone: function (backbone_card, index) {
                 console.log("骨干故事的backbone_card，index是 " + backbone_card, index)
@@ -1049,7 +1063,7 @@
                 console.log(current_backbone)
                 axios({
                     method: 'post',
-                    url: this.basepath + "epic",
+                    url: this.basepath + "insert/epic",
                     data: current_backbone,
                     headers: {
                         'Content-Type': 'application/json',
@@ -1059,9 +1073,10 @@
                     .then(function (res) {
                         console.log(res.data);
                         if (res.data.status == "SUCCESS") {
-                            _this.backboneList = res.data.epicList
+                            
                             _this.showBackBoneModal = 0
                             _this.current_backbone = {}
+                            _this.getAllData()
                         } else {
                             alert("网络请求失败，请重新编辑")
                         }
@@ -1072,7 +1087,7 @@
                 console.log(current_activity)
                 axios({
                     method: 'post',
-                    url: this.basepath + "activity",
+                    url: this.basepath + "insert/activity",
                     data: current_activity,
                     headers: {
                         'Content-Type': 'application/json',
@@ -1082,9 +1097,9 @@
                     .then(function (res) {
                         console.log(res.data);
                         if (res.data.status == "SUCCESS") {
-                            _this.backboneList= res.data.epicList
                             _this.showActivityModal = 0
                             _this.current_activity = {}
+                            _this.getAllData()
                         } else {
                             alert("网络请求失败，请重新编辑")
                         }
@@ -1096,15 +1111,15 @@
                 current_task.start=this.dateFormatToPost(current_task.start)
                 current_task.end=this.dateFormatToPost(current_task.end)
 
-                if(current_task.status=="UNDO"){
-                    current_task.status=0
-                }
-                else if(current_task.status=="DOING"){
-                    current_task.status=1
-                }
-                else{
-                    current_task.status=2
-                }
+                // if(current_task.status=="UNDO"){
+                //     current_task.status=0
+                // }
+                // else if(current_task.status=="DOING"){
+                //     current_task.status=1
+                // }
+                // else{
+                //     current_task.status=2
+                // }
                 console.log(current_task)
                 axios({
                     method: 'post',
@@ -1134,20 +1149,21 @@
                 current_release.start=this.dateFormatToPost(current_release.start)
                 current_release.end=this.dateFormatToPost(current_release.end)
 
-                if(current_release.status=="UNDO"){
-                    current_release.status=0
-                }
-                else if(current_release.status=="DOING"){
-                    current_release.status=1
-                }
-                else{
-                    current_release.status=2
-                }
+                // if(current_release.status=="UNDO"){
+                //     current_release.status=0
+                // }
+                // else if(current_release.status=="DOING"){
+                //     current_release.status=1
+                // }
+                // else{
+                //     current_release.status=2
+                // }
+
                 console.log(current_release)
 
                 axios({
                     method: 'post',
-                    url: this.basepath + "release",
+                    url: this.basepath + "insert/release",
                     data: current_release,
                     headers: {
                         'Content-Type': 'application/json',
@@ -1157,24 +1173,115 @@
                     .then(function (res) {
                         console.log(res.data);
                         if (res.data.status == "SUCCESS") {
-                            _this.backboneList= res.data.epicList
-                            _this.releaseList = res.data.releaseList
                             _this.showDevelopModal = 0
                             _this.current_release = {}
+                            _this.getAllData()
                         } else {
                             alert("网络请求失败，请重新编辑")
                         }
                     });
             },
 
-            deleteBackbone: function () {
+            deleteBackbone: function (current_backbone, index) {
+            
+                _this = this;
+                console.log(current_backbone)
+                axios({
+                    method: 'delete',
+                    url: this.basepath + "epic/"+current_backbone.id,
+                    // data: current_backbone,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
 
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data == true) {
+                             
+                            _this.showBackBoneModal = 0
+                            _this.current_backbone = {}
+                            _this.getAllData()
+                        } else {
+                            alert("网络请求失败，请重新删除")
+                        }
+                    });
             },
-            deleteActivity: function () {
+            deleteActivity: function (current_activity,backbone_index,activity_index) {
+                console.log("deleteActivity")
+                _this = this;
+                console.log(current_activity)
+                axios({
+                    method: 'delete',
+                    url: this.basepath + "activity/"+current_activity.id,
+                    // data: current_activity,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
 
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                       
+                        if (res.data == true) {
+                            _this.showActivityModal = 0
+                            _this.current_activity = {}
+                             _this.getAllData()
+                         } else {
+                             alert("网络请求失败，请重新删除")
+                         }
+
+                    });
             },
-            deleteRelease:function(){
+            deleteTask:function(current_task){
+                console.log("deleteTask")
+                console.log(current_task)
+                axios({
+                    method: 'delete',
+                    url: this.basepath + "story",
+                    data:current_task,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
 
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        if (res.data == true) {
+                            _this.showTaskModal = 0
+                            _this.current_task = {}
+                             _this.getAllData()
+                         } else {
+                             alert("网络请求失败，请重新删除")
+                         }
+
+                    });
+            },
+            deleteRelease:function(current_release){
+                console.log("deleteRelease")
+                console.log(current_release)
+              
+                axios({
+                    method: 'delete',
+                    url: this.basepath + "release/"+current_release.id,
+                    data: current_release,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+
+                })
+                    .then(function (res) {
+                        console.log(res.data);
+                        
+                        if (res.data == true) {
+                            _this.showDevelopModal = 0
+                            _this.current_release = {}
+                             _this.getAllData()
+                         } else {
+                             alert("网络请求失败，请重新删除")
+                         }
+
+                    });
             },
             //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
             dateFormat:function(time) {

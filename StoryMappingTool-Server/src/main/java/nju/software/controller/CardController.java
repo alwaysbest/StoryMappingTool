@@ -10,6 +10,7 @@ import nju.software.controller.response.CreateOrUpdateReleaseResponse;
 import nju.software.controller.response.CreateOrUpdateStoryResponse;
 import nju.software.entity.*;
 import nju.software.service.CardManageService;
+import nju.software.service.LogService;
 import nju.software.util.StringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,9 @@ public class CardController {
     @Resource
     private CardManageService cardManageService;
 
+    @Resource
+    private LogService logService;
+
     @RequestMapping(value = "/insert/epic", method = RequestMethod.POST)
     public CreateOrUpdateEpicResponse insertEpic(@PathVariable String id,
                                                  @RequestBody CreateOrUpdateEpicRequest request){
@@ -37,6 +41,8 @@ public class CardController {
         if (epic != null) {
             response.setStatus("SUCCESS");
             response.setEpic(epic);
+            logService.insertLog(epic.getProjectId(), request.getCreatorId(),
+                    Item.PROJECT, epic.getId(), epic.getTitle(), OperationType.CREATE);
             return response;
         }
         response.setStatus("FAILURE");
@@ -57,6 +63,8 @@ public class CardController {
         if (activity != null) {
             response.setStatus("SUCCESS");
             response.setActivity(activity);
+            logService.insertLog(activity.getProjectId(), request.getCreatorId(),
+                    Item.PROJECT, activity.getId(), activity.getTitle(), OperationType.CREATE);
             return response;
         }
         response.setStatus("FAILURE");
@@ -89,6 +97,8 @@ public class CardController {
         if (story != null) {
             response.setStatus("SUCCESS");
             response.setStory(story);
+            logService.insertLog(story.getProjectId(), request.getCreatorId(),
+                    Item.PROJECT, story.getId(), story.getTitle(), OperationType.CREATE);
             return response;
         }
         response.setStatus("FAILURE");
@@ -116,6 +126,8 @@ public class CardController {
         if (release != null) {
             response.setStatus("SUCCESS");
             response.setRelease(release);
+            logService.insertLog(release.getProjectId(), request.getCreatorId(),
+                    Item.PROJECT, release.getId(), release.getTitle(), OperationType.CREATE);
             return response;
         }
         response.setStatus("FAILURE");

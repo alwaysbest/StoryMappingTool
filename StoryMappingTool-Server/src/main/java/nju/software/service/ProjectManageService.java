@@ -25,9 +25,13 @@ public interface ProjectManageService {
 
     Project createProject(int creatorId, String title, String description);
 
+    Project updateProject(int projectId,String title,String description);
+
     boolean existProject(int id);
 
     boolean inviteMember(int projectId, String email);
+
+    boolean removeMember(int projectId, int userId);
 
     Epic createEpic(int projectId, int sequenceId, String title, String description);
 
