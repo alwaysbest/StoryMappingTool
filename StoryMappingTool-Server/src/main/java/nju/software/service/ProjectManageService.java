@@ -31,7 +31,7 @@ public interface ProjectManageService {
 
     boolean inviteMember(int projectId, String email);
 
-    boolean removeMember(int projectId, int userId);
+    boolean removeMember(int projectId, String email);
 
     Epic createEpic(int projectId, int sequenceId, String title, String description);
 
