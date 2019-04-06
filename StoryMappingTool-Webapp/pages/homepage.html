@@ -211,7 +211,7 @@ new Vue({
 
         deleteMember:function(index){
             var member=this.memberList[index][1];
-            alert(member)
+
             var projectId=this.projectId;
             axios.post(
                 'http://172.19.240.113/ui/project/'+projectId+'/remove-member',
@@ -221,6 +221,21 @@ new Vue({
             ).then((response)=>{
                 if(response.data.status==='SUCCESS'){
                     this.$message.success('已删除成员');
+                    axios.get(
+                                 'http://172.19.240.113/ui/project/'+this.projectId,
+                            )
+                      .then((response)=>{
+                         if(response.data.status==='SUCCESS'){
+                            <!--alert(response.data.projectList[0]['title']);-->
+                           this.memberList=response.data.memberList;
+                           <!--alert(this.memberList[0][0]);-->
+                         }else{
+                            this.$message.info('获取成员失败');
+
+                         }
+
+                    })
+
                 }else{
                     this.$message.info('删除成员失败');
                 }
