@@ -6,6 +6,7 @@
     <script src="../static/js/vue.js"></script>
     <script src="../static/js/index.js"></script>
     <script src="../static/js/axios.js"></script>
+    <script src="../static/js/html2canvas.js"></script>
     <link rel="stylesheet" href="../static/css/index.css"/>
     <link rel="stylesheet" href="../static/css/amazeui.min.css" />
     <link rel="stylesheet" href="../static/css/admin.css">
@@ -39,6 +40,7 @@
         <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
 
             <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+                <li @click="downloadPng()" style="cursor:pointer"><Icon class="el-icon-download"></Icon><span>下载</span></li>
 
                 <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link"><span
                         class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
