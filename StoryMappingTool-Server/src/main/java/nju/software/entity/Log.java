@@ -20,7 +20,12 @@ public class Log {
     @Column(name = "operator")
     private int operator;
 
+    @Column(name = "operation_type")
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
+
     @Column(name = "item")
+    @Enumerated(EnumType.STRING)
     private Item item;
 
     @Column(name = "item_id")

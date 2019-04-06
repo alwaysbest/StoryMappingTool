@@ -43,11 +43,11 @@ public class UserManageServiceTest {
 //        assertTrue(!service.generateVerificationCode("MF1832144@smail.nju.edu.cn"));//已经验证过的邮箱，不能生成验证码
     }
 
-    @Test
-    @Transactional
-    public void test4() {
-//        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1a2b"));//验证码不正确
-//        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1A2B"));//验证码正确
-        assertTrue(service.register("lereina","1063162676@qq.com","123456","ABCD"));
-    }
+//    @Test
+//    @Transactional
+//    public void test4() {
+////        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1a2b"));//验证码不正确
+////        assertTrue(!service.register("tangdaye", "tdy_nju@163.com", "123456", "1A2B"));//验证码正确
+//        assertTrue(service.register("lereina","1063162676@qq.com","123456","ABCD"));
+//    }
 }
