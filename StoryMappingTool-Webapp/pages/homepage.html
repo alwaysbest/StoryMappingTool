@@ -116,7 +116,7 @@
 
             </el-col>
         <el-dialog title="管理成员" :visible.sync="dialogMemberVisible">
-            <el-input autocomplete="off" placeholder="请输入成员邮箱" clearable v-model="memberEmail">
+            <el-input autocomplete="off" placeholder="请输入成员邮箱邀请成员" clearable v-model="memberEmail">
                 <el-button slot="append" icon="el-icon-check" @click="submitMember()"></el-button>
 
 
@@ -151,19 +151,19 @@ new Vue({
          dialogModifyDescriptionVisible:false,
           validateModifyForm:{
                  title:[
-                    { required: true, message: '请输入故事名称', trigger: 'blur' },
+                    { required: true, message: '请输入项目名称', trigger: 'blur' },
                  ],
                  description:[
-                   { required: true, message: '请输入故事描述',trigger: 'blur' },
+                   { required: true, message: '请输入项目描述',trigger: 'blur' },
                  ],
          },
         validateForm:{
 
                  title:[
-                    { required: true, message: '请输入故事名称', trigger: 'blur' },
+                    { required: true, message: '请输入项目名称', trigger: 'blur' },
                  ],
                  description:[
-                   { required: true, message: '请输入故事描述',trigger: 'blur' },
+                   { required: true, message: '请输入项目描述',trigger: 'blur' },
                  ],
          },
          modifyForm:{
@@ -211,7 +211,7 @@ new Vue({
 
         deleteMember:function(index){
             var member=this.memberList[index][1];
-            
+
         },
         modifyDescription:function(pId,index){
             this.dialogModifyDescriptionVisible=true;
